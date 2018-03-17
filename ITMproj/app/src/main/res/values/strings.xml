@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">VODNET</string>
+
+    <string name="facebook_app_id">1634729096617037</string>
+    <string name="facebook_login_protocol_scheme">fb1634729096617037</string>
+
+    <!-- POZYCJE MENU -->
+
+    <string name="menuItem1">Jeden</string>
+    <string name="menuItem2">Dwa</string>
+    <string name="menuItem3">Trzy</string>
+    <!-- ____________ -->
+
+    <string name="wzrost_label">Podaj wzrost</string>
+    <string name="waga_label">Podaj wagę</string>
+    <string name="wiek_label">Podaj wiek</string>
+    <string name="przycisk_akceptuj_dane">Akceptuj dane</string>
+    <string name="title_activity_button_game">ButtonGameActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="btn_start">Start!</string>
+    <string name="trafienia">Ilość trafień:</string>
+    <string name="pozostalo_sekund">Pozostało sekund:</string>
+    <string name="zacznij_test">Zacznij test!</string>
+    <string name="dynamiczny_przycisk">Kliknij!</string>
+</resources>

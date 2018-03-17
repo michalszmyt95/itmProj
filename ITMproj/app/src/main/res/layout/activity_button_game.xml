@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp">
+
+        <TextView
+            android:id="@+id/ile_klikniec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/czas"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/tlo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="48dp">
+
+        <TextView
+            android:id="@+id/odliczanie_do_startu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/dynamiczny_przycisk"
+            android:textAlignment="center"
+            android:textSize="36sp" />
+
+        <Button
+            android:id="@+id/test_start"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/oval_button"
+            android:text="@string/zacznij_test" />
+
+        <Button
+            android:id="@+id/btn"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="@drawable/oval_button"
+            android:gravity="center_vertical|center_horizontal"
+            android:text=""
+            android:textColor="#fff" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
