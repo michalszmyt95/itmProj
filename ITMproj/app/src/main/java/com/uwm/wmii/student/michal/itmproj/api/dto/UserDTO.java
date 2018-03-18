@@ -1,11 +1,13 @@
-package com.uwm.wmii.student.michal.itmproj.dto.user;
+package com.uwm.wmii.student.michal.itmproj.api.dto;
 
 /**
  * Created by Michał on 13.03.2018.
  */
 
 public class UserDTO {
-    private String firstname;
+    private String _id;
+    private String imie;
+    private String nazwisko;
     private String email;
     private Integer wiek;
     private Float wzrost;
@@ -13,12 +15,20 @@ public class UserDTO {
 
     public UserDTO() {}
 
-    public String getFirstname() {
-        return firstname;
+    public String getImie() {
+        return imie;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setImie(String imie) {
+        this.imie = imie;
+    }
+
+    public String getNazwisko() {
+        return nazwisko;
+    }
+
+    public void setNazwisko(String nazwisko) {
+        this.nazwisko = nazwisko;
     }
 
     public String getEmail() {
@@ -51,5 +61,13 @@ public class UserDTO {
 
     public void setWaga(Float waga) {
         this.waga = waga;
+    }
+
+    public String get_id() {
+        return _id;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
     }
 }

@@ -74,14 +74,13 @@ public class ButtonGameActivity extends AppCompatActivity {
                 testStartBtn.setVisibility(View.GONE);
                 odliczanie.setVisibility(View.VISIBLE);
 
-                new CountDownTimer(4 * 1020, 1000) {
+                new CountDownTimer(4 * 1000, 1000) {
                     public void onTick(long millisUntilFinished) {
                         Animation a = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.powiekszanie);
                         a.reset();
                         odliczanie.clearAnimation();
                         odliczanie.startAnimation(a);
-                        odliczanie.setText(String.valueOf(millisUntilFinished/1000 - 1));
-
+                        odliczanie.setText(String.valueOf(millisUntilFinished/1000));
                     }
                     public void onFinish() {
                         odliczanie.setVisibility(View.GONE);
@@ -94,30 +93,42 @@ public class ButtonGameActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            iloscKlikniec++;
-            String iloscKliniec = getApplicationContext().getString(R.string.trafienia) + " " + iloscKlikniec;
-            ileKlikniec.setText(iloscKliniec);
+                view.setEnabled(false);
+                iloscKlikniec++;
+                String iloscKliniec = getApplicationContext().getString(R.string.trafienia) + " " + iloscKlikniec;
+                ileKlikniec.setText(iloscKliniec);
             }
         });
     }
 
     private void wykonajGre() {
-        new CountDownTimer(iloscSekund * 1000, 500) {
+        new CountDownTimer(iloscSekund * 1000, 1000) { // Odliczanie czasu:
             public void onTick(long millisUntilFinished) {
                 String czasText = getApplicationContext().getString(R.string.pozostalo_sekund) + " " + millisUntilFinished / 1000;
                 czas.setText(czasText);
-                {
-                    btn.setY((float) (Math.random() * (wysokoscEkranu - btn.getHeight())));
-                    btn.setX((float) (Math.random() * (szerokoscEkranu - btn.getWidth())));
-                    btn.setVisibility(View.VISIBLE);
-                }
             }
             public void onFinish() {
                 czas.setText("Koniec!");
+                wywolajWynik();
+            }
+        }.start();
+
+        new CountDownTimer(iloscSekund * 1000, 750) { // Timer przycisku. Max - 40 razy
+            public void onTick(long millisUntilFinished) {
+                btn.setY((float) (Math.random() * (wysokoscEkranu - btn.getHeight())));
+                btn.setX((float) (Math.random() * (szerokoscEkranu - btn.getWidth())));
+                btn.setVisibility(View.VISIBLE);
+                btn.setEnabled(true);
+            }
+            public void onFinish() {
                 btn.setVisibility(View.GONE);
                 testStartBtn.setVisibility(View.VISIBLE);
             }
         }.start();
+    }
+
+    private void wywolajWynik() {
+
     }
 
 }

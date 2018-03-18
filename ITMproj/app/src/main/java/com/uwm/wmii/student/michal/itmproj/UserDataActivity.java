@@ -13,7 +13,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.uwm.wmii.student.michal.itmproj.dto.user.UserDTO;
+import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
+import com.uwm.wmii.student.michal.itmproj.api.service.UserRestService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserDataActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
@@ -23,8 +30,6 @@ public class UserDataActivity extends AppCompatActivity {
     private TextInputEditText wiekInput;
     private TextInputEditText wzrostInput;
     private TextInputEditText wagaInput;
-
-    private UserDTO userDTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +61,15 @@ public class UserDataActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (walidujWprowadzoneDane()) {
-                    userDTO = new UserDTO();
+                    UserDTO userDTO = new UserDTO();
+                    userDTO.set_id("123124");
                     userDTO.setWiek(Integer.parseInt(wiekInput.getText().toString()));
                     userDTO.setWzrost(Float.parseFloat(wzrostInput.getText().toString()));
                     userDTO.setWaga(Float.parseFloat(wagaInput.getText().toString()));
                     Log.d("WPROWADZONE DANE", userDTO.toString());
+
+                    dodajUzytkownikaDoBazyDanych(userDTO);
+
                     startActivity(new Intent(UserDataActivity.this, ButtonGameActivity.class));
                 }
             }
@@ -88,5 +97,41 @@ public class UserDataActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    /*
+    ** Przykładowa metoda rest serwisu z androida. Korzysta z zadeklarowanego interfejsu UserRestService.
+     */
+    private void dodajUzytkownikaDoBazyDanych(UserDTO userDTO) {
+
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(getApplicationContext().getString(R.string.restApiUrl))
+                .addConverterFactory(GsonConverterFactory.create());
+
+        Retrofit retrofit = builder.build();
+
+        UserRestService service = retrofit.create(UserRestService.class);
+
+        Call<UserDTO> call = service.dodajUzytkownika(userDTO);
+
+        call.enqueue(new Callback<UserDTO>() { // Akcje które dzieją się przy zwróceniu wartości z serwera:
+            @Override
+            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
+                Toast.makeText(UserDataActivity.this, "UDALO SIE!", Toast.LENGTH_LONG).show();
+                if (response.isSuccessful()) {
+                    try {
+                        Log.d("USER ID: ", response.body().get_id());
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserDTO> call, Throwable t) {
+                Toast.makeText(UserDataActivity.this, "NIE UDALO SIE :(", Toast.LENGTH_LONG).show();
+                Log.d("BLAD RESTA: ", t.toString());
+            }
+        });
     }
 }
