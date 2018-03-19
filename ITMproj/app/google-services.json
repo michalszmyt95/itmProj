@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "497168107951",
+    "project_id": "firebase-vodnet"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:497168107951:android:0d9fee92b1110bed",
+        "android_client_info": {
+          "package_name": "com.uwm.wmii.student.michal.itmproj"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "497168107951-atnim6b9dh53iqn57f019bn806tt9uue.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "497168107951-e3kkm9oj82iclccqht3k730mahts67ae.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.uwm.wmii.student.michal.itmproj",
+            "certificate_hash": "86f749481bcdc704e5720637f4afc103ef08a03f"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwqpgwgQFbSp4p2pqcPdvkVQqkmGqbK3c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
