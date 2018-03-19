@@ -13,6 +13,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -23,6 +24,18 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,17 +46,47 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+
 public class MainActivity extends AppCompatActivity {
     public static final String PREFERENCES_NAME = "userPreferences";
 
     private CallbackManager callbackManager;
     private ProgressDialog mDialog;
     private SharedPreferences sharedPreferences;
+    private static final int RC_SIGN_IN = 9001;
+    private static final String TAG = "";
+    private GoogleApiClient mGoogleApiClient;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+
+            if(result.isSuccess()) {
+
+                GoogleSignInAccount user = result.getSignInAccount();
+
+                SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+                preferencesEditor.putString("loginMethod", "google");
+                preferencesEditor.putString("email", user.getEmail());
+                preferencesEditor.putString("firstName", user.getGivenName());
+                preferencesEditor.putString("lastName", user.getFamilyName());
+                preferencesEditor.putString("id", user.getId());
+                preferencesEditor.putString("accessToken", user.getServerAuthCode());
+                preferencesEditor.putString("profilePictureURL", String.valueOf(user.getPhotoUrl()));
+
+                preferencesEditor.apply();
+                preferencesEditor.commit();
+
+                startActivity(new Intent(MainActivity.this, UserDataActivity.class));
+
+            } else {
+
+            }
+        }
     }
 
     @Override
@@ -55,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences(PREFERENCES_NAME, Activity.MODE_PRIVATE);
 
         callbackManager = CallbackManager.Factory.create();
+        ustawLogowanieGoogle();
         ustawLogowaniePrzezFacebooka();
     }
 
@@ -90,6 +134,40 @@ public class MainActivity extends AppCompatActivity {
 
         return true;
     }
+
+    private void ustawLogowanieGoogle() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        if(GoogleSignIn.getLastSignedInAccount(this) != null) {
+            startActivity(new Intent(MainActivity.this, UserDataActivity.class));
+            return;
+        }
+
+
+        SignInButton signInButton = findViewById(R.id.sign_in_button);
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mGoogleApiClient != null) {
+                    mGoogleApiClient.disconnect();
+                }
+                int i = v.getId();
+                if (i == R.id.sign_in_button) {
+                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                }
+            }
+
+        });
+    }
+
 
     private void ustawLogowaniePrzezFacebooka() {
         LoginButton loginButton = findViewById(R.id.login_button);
