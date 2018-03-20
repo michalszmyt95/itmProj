@@ -24,4 +24,10 @@
     <string name="zacznij_test">Zacznij test!</string>
     <string name="dynamiczny_przycisk">Kliknij!</string>
     <string name="restApiUrl">http://10.0.2.2:5000/</string>
+    <string name="tab_menu_panel_uzytkownika">Użytkownik</string>
+    <string name="tab_menu_testy">Testy</string>
+    <string name="tab_menu_impreza">Impreza</string>
+    <string name="tab_menu_wyloguj">Wyloguj</string>
+    <string name="tab_menu_statystyki">statystyki</string>
+    <string name="testy_button">Testy</string>
 </resources>

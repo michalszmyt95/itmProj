@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
 import com.uwm.wmii.student.michal.itmproj.api.service.UserRestService;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,13 +24,14 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserDataActivity extends AppCompatActivity {
-    private SharedPreferences sharedPreferences;
 
     private Button przyciskAkceptacji;
 
     private TextInputEditText wiekInput;
     private TextInputEditText wzrostInput;
     private TextInputEditText wagaInput;
+
+    private AppLoginManager appLoginManager = AppLoginManager.getInstance(getApplicationContext());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,7 @@ public class UserDataActivity extends AppCompatActivity {
         ustawPrzyciskAkceptacji();
         TextView header = findViewById(R.id.header_user_data);
         String text = "Witaj ";
-        sharedPreferences = getSharedPreferences(MainActivity.PREFERENCES_NAME, Activity.MODE_PRIVATE);
-        text += sharedPreferences.getString("firstName", "nieznajomy") + "!";
+        text +=appLoginManager.pobierzDaneLogowania().getImie() + "!";
         header.setText(text);
     }
 
@@ -69,8 +70,6 @@ public class UserDataActivity extends AppCompatActivity {
                     Log.d("WPROWADZONE DANE", userDTO.toString());
 
                     dodajUzytkownikaDoBazyDanych(userDTO);
-
-                    startActivity(new Intent(UserDataActivity.this, ButtonGameActivity.class));
                 }
             }
         });

@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/item1"
-        android:orderInCategory="1"
-        android:title="@string/menuItem1">
-    </item>
-    <item
-        android:id="@+id/item2"
-        android:orderInCategory="2"
-        android:title="@string/menuItem2">
-    </item>
-    <item
-        android:id="@+id/item3"
-        android:orderInCategory="3"
-        android:title="@string/menuItem3">
-    </item>
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_power_settings_new_black_24dp"
+        android:title="@string/tab_menu_wyloguj"
+        app:showAsAction="always"
+        android:orderInCategory="0"/>
 
 </menu>
