@@ -1,17 +1,17 @@
-¯eby backend chodzi³, trzeba najpierw odpowiednio przygotowaæ pythona.
-Zak³adam, ¿e wszyscy dzia³amy na windowsie, dlatego:
-Œci¹gamy z https://www.python.org/ wersje pythona 3.6+ na windowsa i instalujemy.
+Å»eby backend chodziÅ‚, trzeba najpierw odpowiednio przygotowaÄ‡ pythona.
+ZakÅ‚adam, Å¼e wszyscy dziaÅ‚amy na windowsie, dlatego:
+ÅšciÄ…gamy z https://www.python.org/ wersje pythona 3.6+ na windowsa i instalujemy.
 
-Nastêpnie musimy pobraæ potrzebne biblioteki. Bêdzie do "mikroframework" Flask, oraz pymongo z flaska.
+NastÄ™pnie musimy pobraÄ‡ potrzebne biblioteki. BÄ™dzie to "mikroframework" Flask, oraz pymongo z flaska.
 
-Aby to zrobiæ, otwieramy wiersz poleceñ (najlepiej jako administrator).
+Aby to zrobiÄ‡, otwieramy wiersz poleceÅ„ (najlepiej jako administrator).
 Wstukujemy w nim:
 	pip install Flask
 
-PóŸniej:
+PÃ³Åºniej:
 	pip install Flask-PyMongo
 
 I na koniec:
 	pip install dnspython
 
-Aby odpaliæ serwer, nale¿y znajduj¹c siê w folderze backend wpisaæ w wierszu poleceñ "python start.py".
+Aby odpaliÄ‡ serwer, naleÅ¼y znajdujÄ…c siÄ™ w folderze backend wpisaÄ‡ w wierszu poleceÅ„ "python start.py".
