@@ -15,11 +15,14 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.uwm.wmii.student.michal.itmproj.model.DaneLogowania;
 import com.uwm.wmii.student.michal.itmproj.model.enumy.MetodaLogowania;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
@@ -32,10 +35,11 @@ import java.util.Arrays;
 public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
 
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleSignInClient mGoogleSignInClient;
     private CallbackManager callbackManager;
     private ProgressDialog mDialog;
     private AppLoginManager appLoginManager;
+    private String TAG = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,15 @@ public class LoginActivity extends AppCompatActivity {
         ustawLogowaniePrzezFacebooka();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+   //     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+
+
+    }
+
     private void przejdzDoMainActivity() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
@@ -68,27 +81,33 @@ public class LoginActivity extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        appLoginManager.setGoogleApiClient(mGoogleApiClient);
+
+          appLoginManager.setGoogleSignInClient(mGoogleSignInClient);
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mGoogleApiClient != null) {
-                    mGoogleApiClient.disconnect();
-                }
-                int i = v.getId();
-                if (i == R.id.sign_in_button) {
-                    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                switch (v.getId()) {
+                    case R.id.sign_in_button:
+                        signIn();
+                        break;
+                    // ...
                 }
             }
 
+            private void signIn() {
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+            }
+
         });
+    }
+    public GoogleSignInClient getGoogleSignInClient() {
+
+        return mGoogleSignInClient;
     }
 
     @Override
@@ -96,33 +115,42 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
+    // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+        // The Task returned from this call is always completed, no need to attach
+        // a listener.
+        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+        handleSignInResult(task);
+    }
 
-            if(result.isSuccess()) {
-                GoogleSignInAccount user = result.getSignInAccount();
+}
 
-                try {
-                    AppLoginManager appLoginManager = AppLoginManager.getInstance(getApplicationContext());
-                    DaneLogowania daneLogowania = new DaneLogowania();
-                    daneLogowania.setImie(user.getDisplayName());
-                    daneLogowania.setEmail(user.getEmail());
-                    daneLogowania.setNazwisko(user.getFamilyName());
-                    daneLogowania.setMetodaLogowania(MetodaLogowania.Google);
-                    daneLogowania.setToken(user.getIdToken());
-                    daneLogowania.setUserID(user.getId());
-                    if (user.getPhotoUrl() != null) {
-                        daneLogowania.setZdjecieProfiloweUrl(user.getPhotoUrl().toString());
-                    }
-                    appLoginManager.zapiszDaneLogowaniaDoSharedPreferences(daneLogowania);
-                    this.przejdzDoMainActivity();
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
-
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount user = completedTask.getResult(ApiException.class);
+            DaneLogowania daneLogowania = new DaneLogowania();
+            daneLogowania.setImie(user.getDisplayName());
+            daneLogowania.setEmail(user.getEmail());
+            daneLogowania.setNazwisko(user.getFamilyName());
+            daneLogowania.setMetodaLogowania(MetodaLogowania.Google);
+            daneLogowania.setToken(user.getIdToken());
+            daneLogowania.setUserID(user.getId());
+            if (user.getPhotoUrl() != null) {
+                daneLogowania.setZdjecieProfiloweUrl(user.getPhotoUrl().toString());
             }
+            appLoginManager.zapiszDaneLogowaniaDoSharedPreferences(daneLogowania);
+            this.przejdzDoMainActivity();
+
+            // Signed in successfully, show authenticated UI.
+
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
+
         }
     }
+
 
     private void ustawLogowaniePrzezFacebooka() {
         LoginButton loginButton = findViewById(R.id.login_button);

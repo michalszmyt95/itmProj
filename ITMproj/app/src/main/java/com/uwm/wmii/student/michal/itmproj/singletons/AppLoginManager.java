@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.uwm.wmii.student.michal.itmproj.LoginActivity;
 import com.uwm.wmii.student.michal.itmproj.model.DaneLogowania;
 import com.uwm.wmii.student.michal.itmproj.model.enumy.MetodaLogowania;
 
@@ -18,9 +18,10 @@ public class AppLoginManager {
     private static final AppLoginManager ourInstance = new AppLoginManager();
 
     private static Context context;
+    private static LoginActivity loginActivity;
     private static SharedPreferences sharedPreferences;
 
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleSignInClient mGoogleSignInClient;
 
     public static AppLoginManager getInstance(Context context) {
         if (AppLoginManager.context == null) {
@@ -33,14 +34,15 @@ public class AppLoginManager {
     private AppLoginManager() {
     }
 
-    public void setGoogleApiClient(GoogleApiClient mGoogleApiClient) {
-        this.mGoogleApiClient = mGoogleApiClient;
+    public GoogleSignInClient setGoogleSignInClient(GoogleSignInClient mGoogleSignInClient) {
+        this.mGoogleSignInClient = mGoogleSignInClient;
+        return mGoogleSignInClient;
     }
 
-    public GoogleApiClient getGoogleApiClient() {
-        return this.mGoogleApiClient;
-    }
+    public GoogleSignInClient getGoogleSignInClient() {
 
+        return mGoogleSignInClient;
+    }
     public void zapiszDaneLogowaniaDoSharedPreferences(DaneLogowania daneLogowania) {
         SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
         if (daneLogowania.getMetodaLogowania() != null) {
@@ -84,9 +86,10 @@ public class AppLoginManager {
                     LoginManager.getInstance().logOut();
                     break;
                 case Google:
-                    if (mGoogleApiClient.isConnected())
-                        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
+                    mGoogleSignInClient.signOut();
+
                     break;
+
             }
         }
 
@@ -94,6 +97,5 @@ public class AppLoginManager {
         preferencesEditor.clear();
         preferencesEditor.commit();
     }
-
 
 }
