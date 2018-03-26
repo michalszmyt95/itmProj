@@ -25,6 +25,7 @@
         <activity android:name=".UserDataActivity" />
         <activity android:name=".ButtonGameActivity" />
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".alkoninja.AlkoNinjaLauncher" android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>
