@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.uwm.wmii.student.michal.itmproj.MainActivity">>
@@ -29,50 +30,35 @@
         app:menu="@menu/drawer_view"
         app:headerLayout="@layout/nav_header"/>
 
-        <RelativeLayout android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-            <android.support.design.widget.TabLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/userTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tab_menu_panel_uzytkownika" />
+        <Button
+            android:id="@+id/testyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/testyBtn2"
+            android:layout_alignLeft="@+id/testyBtn2"
+            android:layout_alignStart="@+id/testyBtn2"
+            android:hapticFeedbackEnabled="false"
+            android:text="@string/testy_button"
+            android:textAlignment="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/statsTab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tab_menu_statystyki" />
+        <Button
+            android:id="@+id/testyBtn2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:hapticFeedbackEnabled="false"
+            android:text="Alko Ninja"
+            android:textAlignment="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </RelativeLayout>
 
-            </android.support.design.widget.TabLayout>
-
-            <Button
-                android:id="@+id/testyBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/testyBtn2"
-                android:layout_alignLeft="@+id/testyBtn2"
-                android:layout_alignStart="@+id/testyBtn2"
-                android:hapticFeedbackEnabled="false"
-                android:text="@string/testy_button"
-                android:textAlignment="center"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <Button
-                android:id="@+id/testyBtn2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="20dp"
-                android:hapticFeedbackEnabled="false"
-                android:text="Alko Ninja"
-                android:textAlignment="center"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent" />
-        </RelativeLayout>
 </android.support.v4.widget.DrawerLayout>
