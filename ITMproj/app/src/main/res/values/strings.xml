@@ -30,4 +30,8 @@
     <string name="tab_menu_wyloguj">Wyloguj</string>
     <string name="tab_menu_statystyki">statystyki</string>
     <string name="testy_button">Testy</string>
+    <string name="Profil">Profil</string>
+    <string name="Imprezy">Imprezy</string>
+    <string name="Historia">Historia</string>
+    <string name="Wyloguj">Wyloguj</string>
 </resources>

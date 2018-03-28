@@ -55,14 +55,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ustawPrzyciski() {
-        testyBtn = findViewById(R.id.testyBtn);
+       testyBtn = findViewById(R.id.testyBtn);
         testyBtn.setOnClickListener(new View.OnClickListener() {
             @Override //TODO: Tutaj powinno być przejście do widoku wyboru testów. W tej chwili mamy jeden, więc przechodzimy od razu do niego.
             public void onClick(View v) { // Przejście do testu.
                 startActivity(new Intent(MainActivity.this, ButtonGameActivity.class));
             }
         });
-        testyBtn2 = findViewById(R.id.testyBtn2);
+       testyBtn2 = findViewById(R.id.testyBtn2);
         testyBtn2.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AlkoNinjaLauncher.class));
