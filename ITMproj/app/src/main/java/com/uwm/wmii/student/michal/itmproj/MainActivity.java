@@ -31,12 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         this.appLoginManager = AppLoginManager.getInstance(getApplicationContext());
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
+
         ustawPrzyciski();
     }
 
@@ -60,19 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 appLoginManager.wyloguj();
                 super.onBackPressed(); // powrót do poprzedniej aktywności.
                 break;
-            case R.id.nav_profile:
-                Toast.makeText(this,"Profil",Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.nav_party:
-                Toast.makeText(this,"Imprezy",Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.nav_history:
-                Toast.makeText(this,"Historia",Toast.LENGTH_SHORT).show();
-                
-                return true;
-            case R.id.nav_logout:
-                Toast.makeText(this,"Wyloguj",Toast.LENGTH_SHORT).show();
-                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

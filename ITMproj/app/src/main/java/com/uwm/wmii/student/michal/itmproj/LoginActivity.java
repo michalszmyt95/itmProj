@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void przejdzDoMainActivity() {
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        startActivity(new Intent(LoginActivity.this, NavigationDrawer.class));
     }
 
     private void ustawLogowanieGoogle() {
