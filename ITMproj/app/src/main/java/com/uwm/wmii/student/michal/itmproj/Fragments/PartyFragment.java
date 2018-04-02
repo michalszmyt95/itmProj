@@ -2,6 +2,7 @@ package com.uwm.wmii.student.michal.itmproj.Fragments;
 
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,11 +18,10 @@ import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
 import com.uwm.wmii.student.michal.itmproj.Fragments.TestsFragment;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 import android.view.View;
+import android.widget.Toast;
 
 public class PartyFragment extends Fragment {
 
-    Button testyBtn;
-    Button testyBtn2;
 
     public PartyFragment() {
 
@@ -32,11 +32,7 @@ public class PartyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_party, container, false);
-       // testyBtn = (Button) getView().findViewById(R.id.testyBtn);
-        //testyBtn2 = (Button)getView().findViewById(R.id.testyBtn2);
-
-        //return View
+        return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
 }

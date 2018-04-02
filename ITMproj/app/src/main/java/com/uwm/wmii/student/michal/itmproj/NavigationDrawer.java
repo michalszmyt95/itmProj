@@ -17,17 +17,19 @@ import com.uwm.wmii.student.michal.itmproj.Fragments.HomeFragment;
 import com.uwm.wmii.student.michal.itmproj.Fragments.PartyFragment;
 import com.uwm.wmii.student.michal.itmproj.Fragments.TestsFragment;
 import com.uwm.wmii.student.michal.itmproj.SettingsActivity;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 
 public class NavigationDrawer extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    private AppLoginManager appLoginManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        this.appLoginManager = AppLoginManager.getInstance(getApplicationContext());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -51,14 +53,15 @@ public class NavigationDrawer extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            this.moveTaskToBack(true);
+            //super.onBackPressed();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_navigation_drawer_drawer, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -70,9 +73,13 @@ public class NavigationDrawer extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.logout) {
+            appLoginManager.wyloguj();
+            Intent i = new Intent(NavigationDrawer.this, LoginActivity.class);
+            startActivity(i);
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }
