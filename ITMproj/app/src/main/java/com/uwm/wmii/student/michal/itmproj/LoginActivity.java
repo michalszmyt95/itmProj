@@ -1,7 +1,10 @@
 package com.uwm.wmii.student.michal.itmproj;
 
+import android.accounts.Account;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +17,12 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.GoogleAuthException;
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
@@ -30,6 +34,7 @@ import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
@@ -39,17 +44,15 @@ public class LoginActivity extends AppCompatActivity {
     private CallbackManager callbackManager;
     private ProgressDialog mDialog;
     private AppLoginManager appLoginManager;
-    private String TAG = "";
+    private String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_login);
 
         // AppLoginManager pośredniczy w dostępie do danych użytkownika w shared preferences
         this.appLoginManager = AppLoginManager.getInstance(getApplicationContext());
-
         callbackManager = CallbackManager.Factory.create();
 
         //Jeśli użytkownik już zalogowany:
@@ -66,14 +69,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
    //     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-
-
     }
 
     private void przejdzDoMainActivity() {
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        //startActivity(new Intent(LoginActivity.this, UserDataActivity.class));
     }
 
     private void ustawLogowanieGoogle() {
@@ -82,9 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-
-          appLoginManager.setGoogleSignInClient(mGoogleSignInClient);
+        appLoginManager.setGoogleSignInClient(mGoogleSignInClient);
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -127,30 +126,27 @@ public class LoginActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount user = completedTask.getResult(ApiException.class);
+            GoogleSignInAccount userData = completedTask.getResult(ApiException.class);
             DaneLogowania daneLogowania = new DaneLogowania();
-            daneLogowania.setImie(user.getDisplayName());
-            daneLogowania.setEmail(user.getEmail());
-            daneLogowania.setNazwisko(user.getFamilyName());
+            daneLogowania.setImie(userData.getDisplayName());
+            daneLogowania.setEmail(userData.getEmail());
+            daneLogowania.setNazwisko(userData.getFamilyName());
             daneLogowania.setMetodaLogowania(MetodaLogowania.Google);
-            daneLogowania.setToken(user.getIdToken());
-            daneLogowania.setUserID(user.getId());
-            if (user.getPhotoUrl() != null) {
-                daneLogowania.setZdjecieProfiloweUrl(user.getPhotoUrl().toString());
+            new PozyskiwaczGoogleAccessTokena(appLoginManager, getApplicationContext()).execute(userData.getAccount());
+            daneLogowania.setUserID(userData.getId());
+            if (userData.getPhotoUrl() != null) {
+                daneLogowania.setZdjecieProfiloweUrl(userData.getPhotoUrl().toString());
             }
             appLoginManager.zapiszDaneLogowaniaDoSharedPreferences(daneLogowania);
             this.przejdzDoMainActivity();
-
             // Signed in successfully, show authenticated UI.
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-
         }
     }
-
 
     private void ustawLogowaniePrzezFacebooka() {
         LoginButton loginButton = findViewById(R.id.login_button);
@@ -169,15 +165,16 @@ public class LoginActivity extends AppCompatActivity {
 
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
-                    public void onCompleted(JSONObject userDTO, GraphResponse response) {
+                    public void onCompleted(JSONObject facebookUserDTO, GraphResponse response) {
                         mDialog.dismiss();
                         Log.d("response", response.toString());
                         //Zachowujemy dane z fejsa do sharedPreferences:
                         try {
-                            daneLogowania.setImie(userDTO.getString("first_name"));
-                            daneLogowania.setNazwisko(userDTO.getString("last_name"));
-                            daneLogowania.setEmail(userDTO.getString("email"));
-                            daneLogowania.setZdjecieProfiloweUrl("https://graph.facebook.com/" + userDTO.getString("id") + "/picture?width=250&height=250");
+                            daneLogowania.setImie(facebookUserDTO.getString("first_name"));
+                            daneLogowania.setNazwisko(facebookUserDTO.getString("last_name"));
+                            daneLogowania.setEmail(facebookUserDTO.getString("email"));
+                            daneLogowania.setUserID(facebookUserDTO.getString("id"));
+                            daneLogowania.setZdjecieProfiloweUrl("https://graph.facebook.com/" + facebookUserDTO.getString("id") + "/picture?width=250&height=250");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -204,4 +201,41 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    private static class PozyskiwaczGoogleAccessTokena extends AsyncTask<Account, Void, String> {
+        private String TAG = "PozyskiwaczGoogleAccessTokena";
+        private AppLoginManager appLoginManager;
+        private Context context;
+        //private int REQ_SIGN_IN_REQUIRED = 55664;
+
+        PozyskiwaczGoogleAccessTokena(AppLoginManager appLoginManager, Context applicationContext) {
+            this.appLoginManager = appLoginManager;
+            this.context = applicationContext;
+        }
+
+        @Override
+        protected String doInBackground(Account... params) {
+            Account account = params[0];
+            String scopes = "oauth2:profile email";
+            String token = null;
+            try {
+                token = GoogleAuthUtil.getToken(context, account, scopes);
+            } catch (IOException e) {
+                Log.e(TAG, e.getMessage());
+            } catch (UserRecoverableAuthException e) {
+                //startActivityForResult(e.getIntent(), REQ_SIGN_IN_REQUIRED);
+            } catch (GoogleAuthException e) {
+                Log.e(TAG, e.getMessage());
+            }
+            return token;
+        }
+
+        @Override
+        protected void onPostExecute(String googleAccessToken) {
+            super.onPostExecute(googleAccessToken);
+            appLoginManager.zapiszAccessTokenDoSharedPreferences(googleAccessToken);
+        }
+    }
 }
+
+

@@ -3,6 +3,7 @@ package com.uwm.wmii.student.michal.itmproj.singletons;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -40,21 +41,39 @@ public class AppLoginManager {
     }
 
     public GoogleSignInClient getGoogleSignInClient() {
-
         return mGoogleSignInClient;
     }
+
+    public void zapiszAccessTokenDoSharedPreferences(String accessToken) {
+        SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+        preferencesEditor.putString("token", accessToken);
+        preferencesEditor.apply();
+        preferencesEditor.commit();
+    }
+
     public void zapiszDaneLogowaniaDoSharedPreferences(DaneLogowania daneLogowania) {
         SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
         if (daneLogowania.getMetodaLogowania() != null) {
             preferencesEditor.putString("metodaLogowania", daneLogowania.getMetodaLogowania().toString());
         }
-        preferencesEditor.putString("email", daneLogowania.getEmail());
-        preferencesEditor.putString("imie", daneLogowania.getImie());
-        preferencesEditor.putString("nazwisko", daneLogowania.getNazwisko());
-        preferencesEditor.putString("userId", daneLogowania.getUserID());
-        preferencesEditor.putString("token", daneLogowania.getToken());
-        preferencesEditor.putString("zdjecieProfiloweUrl", daneLogowania.getZdjecieProfiloweUrl());
-
+        if (daneLogowania.getEmail() != null) {
+            preferencesEditor.putString("email", daneLogowania.getEmail());
+        }
+        if (daneLogowania.getImie() != null) {
+            preferencesEditor.putString("imie", daneLogowania.getImie());
+        }
+        if (daneLogowania.getNazwisko() != null) {
+            preferencesEditor.putString("nazwisko", daneLogowania.getNazwisko());
+        }
+        if (daneLogowania.getUserID() != null) {
+            preferencesEditor.putString("userId", daneLogowania.getUserID());
+        }
+        if (daneLogowania.getToken() != null) {
+            preferencesEditor.putString("token", daneLogowania.getToken());
+        }
+        if (daneLogowania.getZdjecieProfiloweUrl() != null) {
+            preferencesEditor.putString("zdjecieProfiloweUrl", daneLogowania.getZdjecieProfiloweUrl());
+        }
         preferencesEditor.apply();
         preferencesEditor.commit();
     }

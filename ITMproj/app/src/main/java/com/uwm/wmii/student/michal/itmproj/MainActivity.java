@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     private void ustawPrzyciski() {
        testyBtn = findViewById(R.id.testyBtn);
         testyBtn.setOnClickListener(new View.OnClickListener() {

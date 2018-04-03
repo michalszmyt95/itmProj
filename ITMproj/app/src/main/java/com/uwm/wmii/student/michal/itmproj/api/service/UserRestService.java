@@ -1,6 +1,7 @@
 package com.uwm.wmii.student.michal.itmproj.api.service;
 
 import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
+import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOperacjiDTO;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -20,13 +21,13 @@ public interface UserRestService {
     @Headers({
             "Accept: application/json",
     })
-    @POST("/uzytkownik")
-    Call<UserDTO> dodajUzytkownika(@Body UserDTO user);
+    @POST("/users/")
+    Call<WynikOperacjiDTO> dodajUzytkownika(@Body UserDTO user);
 
     @Headers({
             "Accept: application/json",
     })
-    @GET("/uzytkownik/{id}")
+    @GET("/users/{id}")
     Call<UserDTO> podajUzytkownika(@Path("id") Integer _id);
 
 }

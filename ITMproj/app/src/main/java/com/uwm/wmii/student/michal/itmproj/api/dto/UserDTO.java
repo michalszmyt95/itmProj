@@ -4,8 +4,8 @@ package com.uwm.wmii.student.michal.itmproj.api.dto;
  * Created by Michał on 13.03.2018.
  */
 
-public class UserDTO {
-    private String _id;
+public class UserDTO extends SocialDTO {
+    private String id;
     private String imie;
     private String nazwisko;
     private String email;
@@ -63,11 +63,12 @@ public class UserDTO {
         this.waga = waga;
     }
 
-    public String get_id() {
-        return _id;
+    public String getId() {
+        return id;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public void setId (String id) {
+        this.id = id;
     }
+
 }

@@ -11,5 +11,6 @@ Wstukujemy w nim:
 	pip install flask-hashing
 	pip install -U jsonpickle
 	pip install dnspython
+	pip install requests
 
 Aby odpalić serwer, należy znajdując się w folderze backend wpisać w wierszu poleceń "python start.py".
