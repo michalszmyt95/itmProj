@@ -1,7 +1,7 @@
 from flask import Flask
 from project.db import mongo, hashing, jwt
 from project.routes.auth import auth_blueprint
-from project.routes.ranks import ranks_blueprint
+from project.routes.stats import stats_blueprint
 from project.routes.users import users_blueprint
 from project.routes.tests import tests_blueprint
 
@@ -21,7 +21,7 @@ def create_app():
 # TUTAJ REJESTRUJEMY DALSZE PLIKI Z REST ENDPOINTAMI I DAJEMY IM PREFIKSY URL:
 def rejestruj_blueprinty(app):
     app.register_blueprint(auth_blueprint, url_prefix='/auth')
-    app.register_blueprint(ranks_blueprint, url_prefix='/ranks')
+    app.register_blueprint(stats_blueprint, url_prefix='/stats')
     app.register_blueprint(users_blueprint, url_prefix='/users')
     app.register_blueprint(tests_blueprint, url_prefix='/tests')
 

@@ -2,7 +2,6 @@ package com.uwm.wmii.student.michal.itmproj;
 
 import android.accounts.Account;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -28,8 +27,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
-import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOdswiezeniaTokenaDTO;
-import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOperacjiDTO;
 import com.uwm.wmii.student.michal.itmproj.api.dto.WynikRejestracjiDTO;
 import com.uwm.wmii.student.michal.itmproj.api.service.AuthRestService;
 import com.uwm.wmii.student.michal.itmproj.model.DaneLogowania;
