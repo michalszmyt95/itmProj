@@ -3,19 +3,13 @@ package com.uwm.wmii.student.michal.itmproj;
 import android.content.Intent;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.support.v7.widget.Toolbar;
 import android.widget.Toast;
-
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 
@@ -47,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        /*
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
@@ -55,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                 appLoginManager.wyloguj();
                 super.onBackPressed(); // powrót do poprzedniej aktywności.
                 break;
-
             case R.id.nav_profile:
                 Toast.makeText(this,"Profil",Toast.LENGTH_SHORT).show();
                 return true;
@@ -69,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this,"Wyloguj",Toast.LENGTH_SHORT).show();
                 return true;
         }
+        */
         return super.onOptionsItemSelected(item);
     }
 
