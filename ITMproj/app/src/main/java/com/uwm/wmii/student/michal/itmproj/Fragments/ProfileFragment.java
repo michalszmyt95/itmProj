@@ -1,21 +1,26 @@
-package com.uwm.wmii.student.michal.itmproj;
+package com.uwm.wmii.student.michal.itmproj.Fragments;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.support.design.widget.TextInputEditText;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
 
+import com.uwm.wmii.student.michal.itmproj.R;
+import com.uwm.wmii.student.michal.itmproj.UserDataActivity;
 import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
 import com.uwm.wmii.student.michal.itmproj.api.service.UserRestService;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
+
+import org.w3c.dom.Text;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,44 +28,37 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class UserDataActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ProfileFragment extends Fragment {
 
-    private Button przyciskAkceptacji;
 
     private TextInputEditText wiekInput;
     private TextInputEditText wzrostInput;
     private TextInputEditText wagaInput;
+  //  private AppLoginManager appLoginManager = AppLoginManager.getInstance(getActivity().getApplicationContext());
+    public ProfileFragment() {
+        // Required empty public constructor
+    }
 
-    private AppLoginManager appLoginManager = AppLoginManager.getInstance(getApplicationContext());
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_data);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        ustawAktywnosc();
-    }
-
-    private void ustawAktywnosc() {
-        ustawInputy();
-        ustawPrzyciskAkceptacji();
-        TextView header = findViewById(R.id.header_user_data);
-        String text = "Witaj ";
-        text +=appLoginManager.pobierzDaneLogowania().getImie() + "!";
-        header.setText(text);
-    }
-
-    private void ustawInputy() {
-        wiekInput = findViewById(R.id.wiek_input);
-        wzrostInput = findViewById(R.id.wzrost_input);
-        wagaInput = findViewById(R.id.waga_input);
-    }
-
-    private void ustawPrzyciskAkceptacji() {
-        przyciskAkceptacji = findViewById(R.id.akceptuj_dane_btn);
-        przyciskAkceptacji.setOnClickListener(new View.OnClickListener() {
+        Button acceptButton =  view.findViewById(R.id.akceptuj_dane_btn);
+        final TextInputEditText wiekInput = view.findViewById(R.id.wiek_input);
+        final TextInputEditText wzrostInput = view.findViewById(R.id.wzrost_input);
+        final TextInputEditText wagaInput = view.findViewById(R.id.waga_input);
+        //Todo sprawdzic czemu wywala apke
+        /*
+        acceptButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+
                 if (walidujWprowadzoneDane()) {
                     UserDTO userDTO = new UserDTO();
                     userDTO.set_id("123124");
@@ -68,43 +66,41 @@ public class UserDataActivity extends AppCompatActivity {
                     userDTO.setWzrost(Float.parseFloat(wzrostInput.getText().toString()));
                     userDTO.setWaga(Float.parseFloat(wagaInput.getText().toString()));
                     Log.d("WPROWADZONE DANE", userDTO.toString());
-
                     dodajUzytkownikaDoBazyDanych(userDTO);
                 }
             }
-        });
-    }
 
+        });
+        */
+        return view;
+    }
+/*
     private Boolean walidujWprowadzoneDane() {
         Log.d("WALIDUJE DANE!", "");
         Toast komunikat;
 
         if (wiekInput.getText().toString().equals("")) {
-            komunikat = Toast.makeText(getApplicationContext(), "Należy podać wiek", Toast.LENGTH_LONG);
+            komunikat = Toast.makeText(getActivity().getApplicationContext(), "Należy podać wiek", Toast.LENGTH_LONG);
             komunikat.setGravity(Gravity.TOP, 0, 230);
             komunikat.show();
             return false;
         } else if (wzrostInput.getText().toString().equals("")) {
-            komunikat = Toast.makeText(getApplicationContext(), "Należy podać wzrost", Toast.LENGTH_LONG);
+            komunikat = Toast.makeText(getActivity().getApplicationContext(), "Należy podać wzrost", Toast.LENGTH_LONG);
             komunikat.setGravity(Gravity.TOP, 0, 230);
             komunikat.show();
             return false;
         } else if (wagaInput.getText().toString().equals("")) {
-            komunikat = Toast.makeText(getApplicationContext(), "Należy podać wagę", Toast.LENGTH_LONG);
+            komunikat = Toast.makeText(getActivity().getApplicationContext(), "Należy podać wagę", Toast.LENGTH_LONG);
             komunikat.setGravity(Gravity.TOP, 0, 230);
             komunikat.show();
             return false;
         }
         return true;
     }
-
-    /*
-    ** Przykładowa metoda rest serwisu z androida. Korzysta z zadeklarowanego interfejsu UserRestService.
-     */
     private void dodajUzytkownikaDoBazyDanych(UserDTO userDTO) {
 
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(getApplicationContext().getString(R.string.restApiUrl))
+                .baseUrl(getActivity().getApplicationContext().getString(R.string.restApiUrl))
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
@@ -116,7 +112,7 @@ public class UserDataActivity extends AppCompatActivity {
         call.enqueue(new Callback<UserDTO>() { // Akcje które dzieją się przy zwróceniu wartości z serwera:
             @Override
             public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                Toast.makeText(UserDataActivity.this, "UDALO SIE!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "UDALO SIE!", Toast.LENGTH_LONG).show();
                 if (response.isSuccessful()) {
                     try {
                         Log.d("USER ID: ", response.body().get_id());
@@ -128,11 +124,11 @@ public class UserDataActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<UserDTO> call, Throwable t) {
-                Toast.makeText(UserDataActivity.this, "NIE UDALO SIE :(", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "NIE UDALO SIE :(", Toast.LENGTH_LONG).show();
                 Log.d("BLAD RESTA: ", t.toString());
             }
         });
     }
 
-
+    */
 }

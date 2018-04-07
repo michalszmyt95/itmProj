@@ -9,17 +9,17 @@
             android:icon="@drawable/oval_button"
             android:title="@string/Home" />
         <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/oval_button"
+            android:title="@string/Profile" />
+        <item
             android:id="@+id/nav_party"
             android:icon="@drawable/oval_button"
             android:title="@string/Party" />
         <item
-            android:id="@+id/nav_tests"
+            android:id="@+id/nav_statistics"
             android:icon="@drawable/oval_button"
-            android:title="@string/Tests" />
-        <item
-            android:id="@+id/nav_history"
-            android:icon="@drawable/oval_button"
-            android:title="@string/History" />
+            android:title="Statystyki" />
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/oval_button"

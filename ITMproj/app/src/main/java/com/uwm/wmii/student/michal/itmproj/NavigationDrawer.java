@@ -12,11 +12,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.uwm.wmii.student.michal.itmproj.Fragments.HistoryFragment;
+import com.uwm.wmii.student.michal.itmproj.Fragments.ProfileFragment;
+import com.uwm.wmii.student.michal.itmproj.Fragments.StatisticsFragment;
 import com.uwm.wmii.student.michal.itmproj.Fragments.HomeFragment;
 import com.uwm.wmii.student.michal.itmproj.Fragments.PartyFragment;
-import com.uwm.wmii.student.michal.itmproj.Fragments.TestsFragment;
-import com.uwm.wmii.student.michal.itmproj.SettingsActivity;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 
 public class NavigationDrawer extends AppCompatActivity
@@ -93,17 +92,17 @@ public class NavigationDrawer extends AppCompatActivity
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flMain,new HomeFragment());
             ft.commit();
+        } else if (id == R.id.nav_profile) {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.flMain, new ProfileFragment());
+            ft.commit();
         } else if (id == R.id.nav_party) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.flMain,new PartyFragment());
             ft.commit();
-        } else if (id == R.id.nav_tests) {
+        } else if (id == R.id.nav_statistics) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flMain, new TestsFragment());
-            ft.commit();
-        } else if (id == R.id.nav_history) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flMain, new HistoryFragment());
+            ft.replace(R.id.flMain, new StatisticsFragment());
             ft.commit();
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(NavigationDrawer.this, SettingsActivity.class);
