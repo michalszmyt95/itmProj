@@ -12,5 +12,6 @@ Wstukujemy w nim:
 	pip install -U jsonpickle
 	pip install dnspython
 	pip install requests
+	pip install flask-jwt-extended
 
 Aby odpalić serwer, należy znajdując się w folderze backend wpisać w wierszu poleceń "python start.py".

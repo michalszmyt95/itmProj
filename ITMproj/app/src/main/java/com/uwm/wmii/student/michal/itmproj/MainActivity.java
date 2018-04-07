@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.nav_history:
                 Toast.makeText(this,"Historia",Toast.LENGTH_SHORT).show();
-                
                 return true;
             case R.id.nav_logout:
                 Toast.makeText(this,"Wyloguj",Toast.LENGTH_SHORT).show();

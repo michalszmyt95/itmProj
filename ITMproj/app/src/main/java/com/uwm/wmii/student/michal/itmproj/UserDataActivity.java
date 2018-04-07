@@ -1,8 +1,5 @@
 package com.uwm.wmii.student.michal.itmproj;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,9 +12,11 @@ import android.widget.Toast;
 
 import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
 import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOperacjiDTO;
+import com.uwm.wmii.student.michal.itmproj.api.service.InterceptorJWT;
 import com.uwm.wmii.student.michal.itmproj.api.service.UserRestService;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,7 +67,7 @@ public class UserDataActivity extends AppCompatActivity {
                     userDTO.setEmail(appLoginManager.pobierzDaneLogowania().getEmail());
                     userDTO.setId("123124");
                     userDTO.setSocialId(appLoginManager.pobierzDaneLogowania().getUserID());
-                    userDTO.setToken(appLoginManager.pobierzDaneLogowania().getToken());
+                    userDTO.setSocialAccessToken(appLoginManager.pobierzDaneLogowania().getSocialAccessToken());
                     userDTO.setMetodaLogowania(appLoginManager.pobierzDaneLogowania().getMetodaLogowania().toString());
                     userDTO.setWiek(Integer.parseInt(wiekInput.getText().toString()));
                     userDTO.setWzrost(Float.parseFloat(wzrostInput.getText().toString()));
@@ -110,6 +109,7 @@ public class UserDataActivity extends AppCompatActivity {
 
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl(getApplicationContext().getString(R.string.restApiUrl))
+                .client(new OkHttpClient().newBuilder().addInterceptor(new InterceptorJWT(getApplicationContext())).build())
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();

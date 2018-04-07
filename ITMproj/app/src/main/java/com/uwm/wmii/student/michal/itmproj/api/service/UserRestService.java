@@ -2,6 +2,7 @@ package com.uwm.wmii.student.michal.itmproj.api.service;
 
 import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
 import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOperacjiDTO;
+import com.uwm.wmii.student.michal.itmproj.api.dto.WynikRejestracjiDTO;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -16,17 +17,9 @@ import retrofit2.http.Path;
 
 public interface UserRestService {
 
-    // TODO: potrzebna zmiana, by nie trzeba było zawsze dodawać domyślnego @Header(). Sprawę załatwi dodanie interceptora.
-
-    @Headers({
-            "Accept: application/json",
-    })
     @POST("/users/")
     Call<WynikOperacjiDTO> dodajUzytkownika(@Body UserDTO user);
 
-    @Headers({
-            "Accept: application/json",
-    })
     @GET("/users/{id}")
     Call<UserDTO> podajUzytkownika(@Path("id") Integer _id);
 
