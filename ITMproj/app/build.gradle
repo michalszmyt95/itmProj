@@ -46,27 +46,10 @@ android {
     buildToolsVersion '26.0.2'
 }
 
-
-
-
-<<<<<<< HEAD
-dependencies {
-    //noinspection GradleCompatible
-    implementation 'com.android.support:support-v4:26.1.0'
-=======
-
-
-
-
-
-
-
-
 dependencies {
     //noinspection GradleCompatible
     implementation 'com.android.support:support-v4:26.1.0'
     implementation 'com.google.android.gms:play-services-plus:11.8.0'
->>>>>>> c406b3fecf995b247d54a156aa8a7bcc0590754c
     compile 'com.android.support:appcompat-v7:26.0.1'
     compile 'com.android.support:design:26.0.1'
 
@@ -74,6 +57,7 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.4.0'
     compile 'com.squareup.retrofit2:converter-gson:2.4.0'
     compile 'com.google.code.gson:gson:2.8.2'
+
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
 
     implementation 'com.squareup.picasso:picasso:2.71828'

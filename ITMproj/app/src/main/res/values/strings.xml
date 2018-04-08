@@ -33,7 +33,6 @@
 
     <string name="Home">Home</string>
     <string name="testy_button">Testy</string>
-<<<<<<< HEAD
     <string name="Profil">Profil</string>
     <string name="Imprezy">Imprezy</string>
     <string name="Historia">Historia</string>
@@ -44,7 +43,7 @@
     <string name="kiedy_wypiles">Kiedy wypiłeś?</string>
     <string name="zacznij_gre">Gotowe, zaczynam!</string>
     <string name="anuluj_gre">Eee, nie</string>
-=======
+
     <string name="Profile">Profil</string>
     <string name="Party">Imprezy</string>
     <string name="Tests">Testy</string>
@@ -62,5 +61,4 @@
         <item>Theme2</item>
     </string-array>
 
->>>>>>> c406b3fecf995b247d54a156aa8a7bcc0590754c
 </resources>

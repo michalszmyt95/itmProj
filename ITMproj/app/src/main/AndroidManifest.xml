@@ -16,34 +16,21 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-<<<<<<< HEAD
-        <activity android:name=".LoginActivity">
-        </activity>
-        <activity android:name=".UserDataActivity" />
-        <activity android:name=".ButtonGameActivity" />
-        <activity android:name=".MainActivity" />
-        <activity
-            android:name=".alkoninja.AlkoNinjaLauncher"
-            android:screenOrientation="landscape" />
-        <activity android:name=".AlkoPickerActivity"
-            android:windowSoftInputMode="stateHidden">
-=======
         <activity
             android:name=".LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
->>>>>>> c406b3fecf995b247d54a156aa8a7bcc0590754c
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-<<<<<<< HEAD
-=======
         <activity android:name=".UserDataActivity" />
         <activity android:name=".ButtonGameActivity" />
         <activity android:name=".MainActivity" />
+		<activity android:name=".AlkoPickerActivity"    
+				  android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".alkoninja.AlkoNinjaLauncher"
             android:screenOrientation="landscape" />
@@ -63,7 +50,6 @@
             android:name=".GamesActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"/>
->>>>>>> c406b3fecf995b247d54a156aa8a7bcc0590754c
     </application>
 
 </manifest>
