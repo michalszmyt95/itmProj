@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.uwm.wmii.student.michal.itmproj.AlkoPickerActivity;
 import com.uwm.wmii.student.michal.itmproj.ButtonGameActivity;
 import com.uwm.wmii.student.michal.itmproj.GamesActivity;
 import com.uwm.wmii.student.michal.itmproj.R;
@@ -42,6 +43,7 @@ public class HomeFragment extends Fragment {
         homeButtonAl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AlkoPickerActivity.class));
                 //Todo: zrobic ten widok i przypisac click , sprawdzic stan uzytkownika
             }
         });
