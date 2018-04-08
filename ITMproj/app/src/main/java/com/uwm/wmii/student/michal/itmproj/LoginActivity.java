@@ -2,7 +2,6 @@ package com.uwm.wmii.student.michal.itmproj;
 
 import android.accounts.Account;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -27,15 +26,25 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
+import com.uwm.wmii.student.michal.itmproj.api.dto.WynikRejestracjiDTO;
+import com.uwm.wmii.student.michal.itmproj.api.service.AuthRestService;
 import com.uwm.wmii.student.michal.itmproj.model.DaneLogowania;
 import com.uwm.wmii.student.michal.itmproj.model.enumy.MetodaLogowania;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppRestManager;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppStatusManager;
+import com.uwm.wmii.student.michal.itmproj.utils.CallbackWynikInterface;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 9001;
@@ -45,6 +54,9 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressDialog mDialog;
     private AppLoginManager appLoginManager;
     private String TAG = "LoginActivity";
+    private AppRestManager appRestManager;
+    private AuthRestService authRestService;
+    private AppStatusManager appStatusManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,15 +67,30 @@ public class LoginActivity extends AppCompatActivity {
         this.appLoginManager = AppLoginManager.getInstance(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
-        //Jeśli użytkownik już zalogowany:
-        if(appLoginManager.czyUzytkownikZalogowany()) {
-            // Po prostu przechodzimy do ekranu głównego:
-            przejdzDoMainActivity();
-            return;
-        }
+        this.appStatusManager = AppStatusManager.getInstance(getApplicationContext());
+
+        this.appRestManager = AppRestManager.getInstance(getApplicationContext());
+        authRestService = appRestManager.podajAuthService();
 
         ustawLogowanieGoogle();
         ustawLogowaniePrzezFacebooka();
+
+        //Jeśli użytkownik ma połączenie z internetem:
+        if (appStatusManager.isOnline()) {
+            //Jeśli użytkownik już zalogowany:
+            if(appLoginManager.czyUzytkownikZalogowany()) {
+                // Po prostu przechodzimy do ekranu głównego, bo użytkownik jest zalogowany - posiada aktualny accessToken.
+                przejdzDoMainActivity();
+                return;
+            } else {
+                appLoginManager.odswiezTokenAsynchronicznie(new CallbackWynikInterface() {
+                    @Override
+                    public void execute() {
+                        przejdzDoMainActivity();
+                    }
+                });
+            }
+        }
     }
 
     @Override
@@ -72,9 +99,28 @@ public class LoginActivity extends AppCompatActivity {
    //     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
     }
 
+    private void zalogujLubZarejestrujSieDoSerwera() {
+        UserDTO daneUzytkownikaDTO = appLoginManager.pobierzDanePotrzebneDoLogowaniaLubRejestracji();
+        Call<WynikRejestracjiDTO> call = authRestService.zalogujLubZarejestruj(daneUzytkownikaDTO);
+        call.enqueue(new Callback<WynikRejestracjiDTO>() {
+            @Override
+            public void onResponse(Call<WynikRejestracjiDTO> call, Response<WynikRejestracjiDTO> response) {
+                if (response.body() != null) {
+                    appLoginManager.zapiszAccessTokenDoSharedPreferences(response.body().getAccessToken());
+                    appLoginManager.zapiszRefreshTokenDoSharedPreferences(response.body().getRefreshToken());
+                    appLoginManager.wylogujSocial();
+                    przejdzDoMainActivity();
+                }
+            }
+            @Override
+            public void onFailure(Call<WynikRejestracjiDTO> call, Throwable t) {
+                Log.d(TAG, "BLAD RESTA :( ");
+            }
+        });
+    }
+
     private void przejdzDoMainActivity() {
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        //startActivity(new Intent(LoginActivity.this, UserDataActivity.class));
+        startActivity(new Intent(LoginActivity.this, NavigationDrawer.class));
     }
 
     private void ustawLogowanieGoogle() {
@@ -104,25 +150,20 @@ public class LoginActivity extends AppCompatActivity {
 
         });
     }
-    public GoogleSignInClient getGoogleSignInClient() {
-
-        return mGoogleSignInClient;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
 
-    // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
         // The Task returned from this call is always completed, no need to attach
         // a listener.
         Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
         handleSignInResult(task);
+        }
     }
-
-}
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
@@ -132,14 +173,41 @@ public class LoginActivity extends AppCompatActivity {
             daneLogowania.setEmail(userData.getEmail());
             daneLogowania.setNazwisko(userData.getFamilyName());
             daneLogowania.setMetodaLogowania(MetodaLogowania.Google);
-            new PozyskiwaczGoogleAccessTokena(appLoginManager, getApplicationContext()).execute(userData.getAccount());
-            daneLogowania.setUserID(userData.getId());
+            daneLogowania.setSocialUserID(userData.getId());
             if (userData.getPhotoUrl() != null) {
                 daneLogowania.setZdjecieProfiloweUrl(userData.getPhotoUrl().toString());
             }
             appLoginManager.zapiszDaneLogowaniaDoSharedPreferences(daneLogowania);
-            this.przejdzDoMainActivity();
-            // Signed in successfully, show authenticated UI.
+
+            AsyncTask<Account, Void, String> pozyskiwaczGoogleAccessTokena = new AsyncTask<Account, Void, String>() {
+                private String TAG = "PozyskiwaczGoogleAccessTokena";
+                //private int REQ_SIGN_IN_REQUIRED = 55664;
+
+                @Override
+                protected String doInBackground(Account... params) {
+                    Account account = params[0];
+                    String scopes = "oauth2:profile email";
+                    String token = null;
+                    try {
+                        token = GoogleAuthUtil.getToken(getApplicationContext(), account, scopes);
+                    } catch (IOException e) {
+                        Log.e(TAG, e.getMessage());
+                    } catch (UserRecoverableAuthException e) {
+                        //startActivityForResult(e.getIntent(), REQ_SIGN_IN_REQUIRED);
+                    } catch (GoogleAuthException e) {
+                        Log.e(TAG, e.getMessage());
+                    }
+                    return token;
+                }
+
+                @Override
+                protected void onPostExecute(String googleAccessToken) {
+                    super.onPostExecute(googleAccessToken);
+                    appLoginManager.zapiszSocialAccessTokenDoSharedPreferences(googleAccessToken);
+                    zalogujLubZarejestrujSieDoSerwera();
+                }
+            }.execute(userData.getAccount());
+
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -147,6 +215,8 @@ public class LoginActivity extends AppCompatActivity {
             Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
         }
     }
+
+
 
     private void ustawLogowaniePrzezFacebooka() {
         LoginButton loginButton = findViewById(R.id.login_button);
@@ -160,7 +230,7 @@ public class LoginActivity extends AppCompatActivity {
                 mDialog.show();
 
                 final DaneLogowania daneLogowania = new DaneLogowania();
-                daneLogowania.setToken(loginResult.getAccessToken().getToken());
+                daneLogowania.setSocialAccessToken(loginResult.getAccessToken().getToken());
                 daneLogowania.setMetodaLogowania(MetodaLogowania.Facebook);
 
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
@@ -173,21 +243,20 @@ public class LoginActivity extends AppCompatActivity {
                             daneLogowania.setImie(facebookUserDTO.getString("first_name"));
                             daneLogowania.setNazwisko(facebookUserDTO.getString("last_name"));
                             daneLogowania.setEmail(facebookUserDTO.getString("email"));
-                            daneLogowania.setUserID(facebookUserDTO.getString("id"));
+                            daneLogowania.setSocialUserID(facebookUserDTO.getString("id"));
                             daneLogowania.setZdjecieProfiloweUrl("https://graph.facebook.com/" + facebookUserDTO.getString("id") + "/picture?width=250&height=250");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                         appLoginManager.zapiszDaneLogowaniaDoSharedPreferences(daneLogowania);
-                        //Przechodzimy do aktywności pozwalającej na wpisywanie danych użytkownika:
-                        przejdzDoMainActivity();
+                        zalogujLubZarejestrujSieDoSerwera();
                     }
                 });
                 //Request Graph API
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,email,first_name,last_name");
                 request.setParameters(parameters);
-                request.executeAsync(); // <-- ta metoda tak naprawdę wykonuje metodę asynchroniczną, tzw. callback opisany wyżej funkcją lambda (userDTO, response) -> {...}
+                request.executeAsync(); // <-- ta metoda tak naprawdę wykonuje metodę asynchroniczną, tzw. callback opisany wyżej funkcją (userDTO, response) -> {...}
             }
 
             @Override
@@ -202,40 +271,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private static class PozyskiwaczGoogleAccessTokena extends AsyncTask<Account, Void, String> {
-        private String TAG = "PozyskiwaczGoogleAccessTokena";
-        private AppLoginManager appLoginManager;
-        private Context context;
-        //private int REQ_SIGN_IN_REQUIRED = 55664;
 
-        PozyskiwaczGoogleAccessTokena(AppLoginManager appLoginManager, Context applicationContext) {
-            this.appLoginManager = appLoginManager;
-            this.context = applicationContext;
-        }
-
-        @Override
-        protected String doInBackground(Account... params) {
-            Account account = params[0];
-            String scopes = "oauth2:profile email";
-            String token = null;
-            try {
-                token = GoogleAuthUtil.getToken(context, account, scopes);
-            } catch (IOException e) {
-                Log.e(TAG, e.getMessage());
-            } catch (UserRecoverableAuthException e) {
-                //startActivityForResult(e.getIntent(), REQ_SIGN_IN_REQUIRED);
-            } catch (GoogleAuthException e) {
-                Log.e(TAG, e.getMessage());
-            }
-            return token;
-        }
-
-        @Override
-        protected void onPostExecute(String googleAccessToken) {
-            super.onPostExecute(googleAccessToken);
-            appLoginManager.zapiszAccessTokenDoSharedPreferences(googleAccessToken);
-        }
-    }
 }
 
 

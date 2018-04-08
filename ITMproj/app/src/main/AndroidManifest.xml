@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.uwm.wmii.student.michal.itmproj">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -15,6 +16,7 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
+<<<<<<< HEAD
         <activity android:name=".LoginActivity">
         </activity>
         <activity android:name=".UserDataActivity" />
@@ -25,12 +27,43 @@
             android:screenOrientation="landscape" />
         <activity android:name=".AlkoPickerActivity"
             android:windowSoftInputMode="stateHidden">
+=======
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
+>>>>>>> c406b3fecf995b247d54a156aa8a7bcc0590754c
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+        <activity android:name=".UserDataActivity" />
+        <activity android:name=".ButtonGameActivity" />
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".alkoninja.AlkoNinjaLauncher"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".NavigationDrawer"
+            android:configChanges="orientation"
+            android:label="@string/title_activity_navigation_drawer"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+        <activity android:name=".SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NavigationDrawer" />
+        </activity>
+        <activity
+            android:name=".GamesActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+>>>>>>> c406b3fecf995b247d54a156aa8a7bcc0590754c
     </application>
 
 </manifest>

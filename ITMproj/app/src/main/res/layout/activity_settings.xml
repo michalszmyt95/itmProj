@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.uwm.wmii.student.michal.itmproj.SettingsActivity">
+
+    <TextView
+        android:id="@+id/themeTextView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="USTAWIENIA" />
+
+    <Button
+        android:id="@+id/themeButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="theme1" />
+
+    <Button
+        android:id="@+id/themeButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="theme2" />
+    <Button
+        android:id="@+id/themeButton3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="theme3"/>
+
+</LinearLayout>

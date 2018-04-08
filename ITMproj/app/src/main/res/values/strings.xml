@@ -24,12 +24,16 @@
     <string name="zacznij_test">Zacznij test!</string>
     <string name="dynamiczny_przycisk">Kliknij!</string>
     <string name="restApiUrl">http://10.0.2.2:5000/</string>
+
     <string name="tab_menu_panel_uzytkownika">Użytkownik</string>
     <string name="tab_menu_testy">Testy</string>
     <string name="tab_menu_impreza">Impreza</string>
     <string name="tab_menu_wyloguj">Wyloguj</string>
     <string name="tab_menu_statystyki">statystyki</string>
+
+    <string name="Home">Home</string>
     <string name="testy_button">Testy</string>
+<<<<<<< HEAD
     <string name="Profil">Profil</string>
     <string name="Imprezy">Imprezy</string>
     <string name="Historia">Historia</string>
@@ -40,4 +44,23 @@
     <string name="kiedy_wypiles">Kiedy wypiłeś?</string>
     <string name="zacznij_gre">Gotowe, zaczynam!</string>
     <string name="anuluj_gre">Eee, nie</string>
+=======
+    <string name="Profile">Profil</string>
+    <string name="Party">Imprezy</string>
+    <string name="Tests">Testy</string>
+    <string name="History">Historia</string>
+    <string name="Logout">Wyloguj</string>
+    <string name="Settings">Ustawienia</string>
+    <string name="title_activity_navigation_drawer">VODNET</string>
+    <string name="navigation_drawer_open">navigation_drawer_open</string>
+    <string name="navigation_drawer_close">navigation_drawer_close</string>
+    <string name="navigation_drawer">navigation_drawer</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="themes">
+        <item>Theme1</item>
+        <item>Theme2</item>
+    </string-array>
+
+>>>>>>> c406b3fecf995b247d54a156aa8a7bcc0590754c
 </resources>

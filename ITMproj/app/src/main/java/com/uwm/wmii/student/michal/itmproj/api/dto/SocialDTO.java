@@ -5,25 +5,35 @@ package com.uwm.wmii.student.michal.itmproj.api.dto;
  */
 
 public class SocialDTO {
-    private String token;
+    private String socialAccessToken;
+    private String socialRefreshToken;
     private String metodaLogowania;
     private String socialId;
 
     public SocialDTO() {
     }
 
-    public SocialDTO(String token, String metodaLogowania, String socialId) {
-        this.token = token;
+    public SocialDTO(String socialAccessToken, String socialRefreshToken, String metodaLogowania, String socialId) {
+        this.socialAccessToken = socialAccessToken;
+        this.socialRefreshToken = socialRefreshToken;
         this.metodaLogowania = metodaLogowania;
         this.socialId = socialId;
     }
 
-    public String getToken() {
-        return token;
+    public String getSocialAccessToken() {
+        return socialAccessToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setSocialAccessToken(String socialAccessToken) {
+        this.socialAccessToken = socialAccessToken;
+    }
+
+    public String getSocialRefreshToken() {
+        return socialRefreshToken;
+    }
+
+    public void setSocialRefreshToken(String socialRefreshToken) {
+        this.socialRefreshToken = socialRefreshToken;
     }
 
     public String getMetodaLogowania() {

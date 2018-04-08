@@ -10,22 +10,26 @@ public class DaneLogowania {
     private String email;
     private String imie;
     private String nazwisko;
+    private String socialUserID;
     private String userID;
-    private String token;
+    private String socialAccessToken;
+    private String socialRefreshToken;
     private String zdjecieProfiloweUrl;
     private MetodaLogowania metodaLogowania;
 
     public DaneLogowania() {
     }
 
-    public DaneLogowania(String email, String imie, String nazwisko, String userID, String token, String zdjecieProfiloweUrl, MetodaLogowania metodaLogowania) {
+    public DaneLogowania(String email, String imie, String nazwisko, String socialUserID, String userID, String socialAccessToken, String socialRefreshToken, String zdjecieProfiloweUrl, MetodaLogowania metodaLogowania) {
         this.email = email;
         this.imie = imie;
         this.nazwisko = nazwisko;
+        this.socialUserID = socialUserID;
         this.userID = userID;
-        this.token = token;
-        this.metodaLogowania = metodaLogowania;
+        this.socialAccessToken = socialAccessToken;
+        this.socialRefreshToken = socialRefreshToken;
         this.zdjecieProfiloweUrl = zdjecieProfiloweUrl;
+        this.metodaLogowania = metodaLogowania;
     }
 
     public String getEmail() {
@@ -36,12 +40,20 @@ public class DaneLogowania {
         this.email = email;
     }
 
-    public String getToken() {
-        return token;
+    public String getSocialAccessToken() {
+        return socialAccessToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setSocialAccessToken(String socialAccessToken) {
+        this.socialAccessToken = socialAccessToken;
+    }
+
+    public String getSocialRefreshToken() {
+        return socialRefreshToken;
+    }
+
+    public void setSocialRefreshToken(String socialRefreshToken) {
+        this.socialRefreshToken = socialRefreshToken;
     }
 
     public String getImie() {
@@ -82,5 +94,13 @@ public class DaneLogowania {
 
     public void setMetodaLogowania(MetodaLogowania metodaLogowania) {
         this.metodaLogowania = metodaLogowania;
+    }
+
+    public String getSocialUserID() {
+        return socialUserID;
+    }
+
+    public void setSocialUserID(String socialUserID) {
+        this.socialUserID = socialUserID;
     }
 }
