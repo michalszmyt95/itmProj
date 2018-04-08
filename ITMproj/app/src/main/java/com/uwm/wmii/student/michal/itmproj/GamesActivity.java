@@ -18,8 +18,8 @@ public class GamesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games);
 
-        Button testyBtn = (Button) findViewById(R.id.testyBtn);
-        Button testyBtn2 = (Button) findViewById(R.id.testyBtn2);
+        Button testyBtn = (Button) findViewById(R.id.games_button_test);
+        Button testyBtn2 = (Button) findViewById(R.id.games_button_ninja);
 
         testyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
