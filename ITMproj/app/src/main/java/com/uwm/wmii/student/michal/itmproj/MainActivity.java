@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
+import com.uwm.wmii.student.michal.itmproj.api.dto.AlkoholeDTO;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 
 public class MainActivity extends AppCompatActivity {
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         testyBtn.setOnClickListener(new View.OnClickListener() {
             @Override //TODO: Tutaj powinno być przejście do widoku wyboru testów. W tej chwili mamy jeden, więc przechodzimy od razu do niego.
             public void onClick(View v) { // Przejście do testu.
-                startActivity(new Intent(MainActivity.this, ButtonGameActivity.class));
+                startActivity(new Intent(MainActivity.this, AlkoPickerActivity.class));
             }
         });
        testyBtn2 = findViewById(R.id.testyBtn2);

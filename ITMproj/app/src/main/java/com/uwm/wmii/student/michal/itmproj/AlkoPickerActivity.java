@@ -17,6 +17,7 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
 import com.uwm.wmii.student.michal.itmproj.api.dto.AlkoholeDTO;
 
 import java.sql.Time;
@@ -145,7 +146,8 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
         anulujButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                startActivity(new Intent(AlkoPickerActivity.this, AlkoNinjaLauncher.class));
+
             }
         });
 
