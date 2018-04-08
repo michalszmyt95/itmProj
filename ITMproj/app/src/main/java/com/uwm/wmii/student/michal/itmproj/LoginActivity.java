@@ -2,7 +2,6 @@ package com.uwm.wmii.student.michal.itmproj;
 
 import android.accounts.Account;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
@@ -28,14 +27,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
-import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOdswiezeniaTokenaDTO;
-import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOperacjiDTO;
 import com.uwm.wmii.student.michal.itmproj.api.dto.WynikRejestracjiDTO;
 import com.uwm.wmii.student.michal.itmproj.api.service.AuthRestService;
 import com.uwm.wmii.student.michal.itmproj.model.DaneLogowania;
 import com.uwm.wmii.student.michal.itmproj.model.enumy.MetodaLogowania;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppRestManager;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppStatusManager;
+import com.uwm.wmii.student.michal.itmproj.utils.CallbackWynikInterface;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,6 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     private String TAG = "LoginActivity";
     private AppRestManager appRestManager;
     private AuthRestService authRestService;
+    private AppStatusManager appStatusManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,26 +67,30 @@ public class LoginActivity extends AppCompatActivity {
         this.appLoginManager = AppLoginManager.getInstance(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
-        appRestManager = AppRestManager.getInstance(getApplicationContext());
+        this.appStatusManager = AppStatusManager.getInstance(getApplicationContext());
+
+        this.appRestManager = AppRestManager.getInstance(getApplicationContext());
         authRestService = appRestManager.podajAuthService();
-
-        String refreshToken = appLoginManager.pobierzRefreshTokenSerwera();
-
-        //Jeśli użytkownik już zalogowany:
-        if(appLoginManager.czyUzytkownikZalogowany()) {
-            // Po prostu przechodzimy do ekranu głównego, bo użytkownik jest zalogowany - posiada aktualny accessToken.
-            przejdzDoMainActivity();
-            return;
-        } else {
-            Boolean wynikOdswiezania = appLoginManager.odswiezToken();
-            if (wynikOdswiezania) { // odświeżono token poprawnie, więc mamy aktualny access token -> możemy przejść dalej.
-                przejdzDoMainActivity();
-                return;
-            }
-        }
 
         ustawLogowanieGoogle();
         ustawLogowaniePrzezFacebooka();
+
+        //Jeśli użytkownik ma połączenie z internetem:
+        if (appStatusManager.isOnline()) {
+            //Jeśli użytkownik już zalogowany:
+            if(appLoginManager.czyUzytkownikZalogowany()) {
+                // Po prostu przechodzimy do ekranu głównego, bo użytkownik jest zalogowany - posiada aktualny accessToken.
+                przejdzDoMainActivity();
+                return;
+            } else {
+                appLoginManager.odswiezTokenAsynchronicznie(new CallbackWynikInterface() {
+                    @Override
+                    public void execute() {
+                        przejdzDoMainActivity();
+                    }
+                });
+            }
+        }
     }
 
     @Override
