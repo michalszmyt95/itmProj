@@ -16,16 +16,21 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".LoginActivity">
+        </activity>
+        <activity android:name=".UserDataActivity" />
+        <activity android:name=".ButtonGameActivity" />
+        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".alkoninja.AlkoNinjaLauncher"
+            android:screenOrientation="landscape" />
+        <activity android:name=".AlkoPickerActivity"
+            android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserDataActivity" />
-        <activity android:name=".ButtonGameActivity" />
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".alkoninja.AlkoNinjaLauncher" android:screenOrientation="landscape"></activity>
     </application>
 
 </manifest>

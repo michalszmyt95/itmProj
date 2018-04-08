@@ -34,4 +34,10 @@
     <string name="Imprezy">Imprezy</string>
     <string name="Historia">Historia</string>
     <string name="Wyloguj">Wyloguj</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="ile_wypiles">Ok! Ile wypiłeś?</string>
+    <string name="kiedy_wypiles">Kiedy wypiłeś?</string>
+    <string name="zacznij_gre">Gotowe, zaczynam!</string>
+    <string name="anuluj_gre">Eee, nie</string>
 </resources>
