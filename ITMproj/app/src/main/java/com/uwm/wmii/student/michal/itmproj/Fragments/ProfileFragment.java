@@ -16,9 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.uwm.wmii.student.michal.itmproj.R;
 import com.uwm.wmii.student.michal.itmproj.UserDataActivity;
+import com.uwm.wmii.student.michal.itmproj.api.dto.ProfilDTO;
 import com.uwm.wmii.student.michal.itmproj.api.dto.UserDTO;
+import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOperacjiDTO;
 import com.uwm.wmii.student.michal.itmproj.api.service.UserRestService;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppRestManager;
 
 import org.w3c.dom.Text;
 
@@ -37,98 +40,98 @@ public class ProfileFragment extends Fragment {
     private TextInputEditText wiekInput;
     private TextInputEditText wzrostInput;
     private TextInputEditText wagaInput;
-  //  private AppLoginManager appLoginManager = AppLoginManager.getInstance(getActivity().getApplicationContext());
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
+    private Button przyciskAkceptacji;
+    private AppLoginManager appLoginManager;
+    private AppRestManager appRestManager;
 
+    public ProfileFragment() { } // Potrzebny pusty publiczny konstruktor.
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        Button acceptButton =  view.findViewById(R.id.akceptuj_dane_btn);
-        final TextInputEditText wiekInput = view.findViewById(R.id.wiek_input);
-        final TextInputEditText wzrostInput = view.findViewById(R.id.wzrost_input);
-        final TextInputEditText wagaInput = view.findViewById(R.id.waga_input);
-        //Todo sprawdzic czemu wywala apke
-        /*
-        acceptButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        ustawInputy(view);
+        ustawPrzyciskAkceptacji(view);
 
-                if (walidujWprowadzoneDane()) {
-                    UserDTO userDTO = new UserDTO();
-                    userDTO.set_id("123124");
-                    userDTO.setWiek(Integer.parseInt(wiekInput.getText().toString()));
-                    userDTO.setWzrost(Float.parseFloat(wzrostInput.getText().toString()));
-                    userDTO.setWaga(Float.parseFloat(wagaInput.getText().toString()));
-                    Log.d("WPROWADZONE DANE", userDTO.toString());
-                    dodajUzytkownikaDoBazyDanych(userDTO);
-                }
-            }
+        this.appRestManager = AppRestManager.getInstance(getContext());
+        this.appLoginManager = AppLoginManager.getInstance(getContext());
 
-        });
-        */
         return view;
     }
-/*
+
+    private void ustawInputy(View view) {
+        wiekInput = view.findViewById(R.id.wiek_input);
+        wzrostInput = view.findViewById(R.id.wzrost_input);
+        wagaInput = view.findViewById(R.id.waga_input);
+    }
+
+    private void ustawPrzyciskAkceptacji(View view) {
+        przyciskAkceptacji = view.findViewById(R.id.akceptuj_dane_btn);
+        przyciskAkceptacji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (walidujWprowadzoneDane()) {
+                    ProfilDTO profilDTO = new ProfilDTO();
+                    profilDTO.setWiek(Integer.parseInt(wiekInput.getText().toString()));
+                    profilDTO.setWzrost(Float.parseFloat(wzrostInput.getText().toString()));
+                    profilDTO.setWaga(Float.parseFloat(wagaInput.getText().toString()));
+                    aktualizujProfilWBazieDanych(profilDTO);
+                }
+            }
+        });
+    }
+
     private Boolean walidujWprowadzoneDane() {
         Log.d("WALIDUJE DANE!", "");
         Toast komunikat;
 
         if (wiekInput.getText().toString().equals("")) {
-            komunikat = Toast.makeText(getActivity().getApplicationContext(), "Należy podać wiek", Toast.LENGTH_LONG);
+            komunikat = Toast.makeText(getContext(), "Należy podać wiek", Toast.LENGTH_LONG);
             komunikat.setGravity(Gravity.TOP, 0, 230);
             komunikat.show();
             return false;
         } else if (wzrostInput.getText().toString().equals("")) {
-            komunikat = Toast.makeText(getActivity().getApplicationContext(), "Należy podać wzrost", Toast.LENGTH_LONG);
+            komunikat = Toast.makeText(getContext(), "Należy podać wzrost", Toast.LENGTH_LONG);
             komunikat.setGravity(Gravity.TOP, 0, 230);
             komunikat.show();
             return false;
         } else if (wagaInput.getText().toString().equals("")) {
-            komunikat = Toast.makeText(getActivity().getApplicationContext(), "Należy podać wagę", Toast.LENGTH_LONG);
+            komunikat = Toast.makeText(getContext(), "Należy podać wagę", Toast.LENGTH_LONG);
             komunikat.setGravity(Gravity.TOP, 0, 230);
             komunikat.show();
             return false;
         }
         return true;
     }
-    private void dodajUzytkownikaDoBazyDanych(UserDTO userDTO) {
 
-        Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl(getActivity().getApplicationContext().getString(R.string.restApiUrl))
-                .addConverterFactory(GsonConverterFactory.create());
-
-        Retrofit retrofit = builder.build();
-
-        UserRestService service = retrofit.create(UserRestService.class);
-
-        Call<UserDTO> call = service.dodajUzytkownika(userDTO);
-
-        call.enqueue(new Callback<UserDTO>() { // Akcje które dzieją się przy zwróceniu wartości z serwera:
+    /*
+** Przykładowa metoda rest serwisu z androida. Korzysta z zadeklarowanego interfejsu UserRestService.
+ */
+    private void aktualizujProfilWBazieDanych(ProfilDTO profilDTO) {
+        UserRestService userService = appRestManager.podajUserService();
+        userService.aktualizujProfil(profilDTO).enqueue(new Callback<WynikOperacjiDTO>() {
+            // Akcje które dzieją się przy  wartości z serwera:
             @Override
-            public void onResponse(Call<UserDTO> call, Response<UserDTO> response) {
-                Toast.makeText(getActivity(), "UDALO SIE!", Toast.LENGTH_LONG).show();
+            public void onResponse(Call<WynikOperacjiDTO> call, Response<WynikOperacjiDTO> response) {
+                Toast.makeText(getContext(), "UDALO SIE!", Toast.LENGTH_LONG).show();
                 if (response.isSuccessful()) {
                     try {
-                        Log.d("USER ID: ", response.body().get_id());
+                        Log.d("ID OPERACJI: ", response.body().getId());
+                        Log.d("CZY SUKCES: ", response.body().getWynik().toString());
                     } catch (NullPointerException e) {
+                        Log.d("BRAK ID: ", "BRAK ID OPERACJI.");
                         e.printStackTrace();
                     }
                 }
             }
-
             @Override
-            public void onFailure(Call<UserDTO> call, Throwable t) {
-                Toast.makeText(getActivity(), "NIE UDALO SIE :(", Toast.LENGTH_LONG).show();
+            public void onFailure(Call<WynikOperacjiDTO> call, Throwable t) {
+                Toast.makeText(getContext(), "NIE UDALO SIE :(", Toast.LENGTH_LONG).show();
                 Log.d("BLAD RESTA: ", t.toString());
             }
         });
     }
 
-    */
+
 }

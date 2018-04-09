@@ -9,8 +9,8 @@ stats_blueprint = Blueprint(
     __name__
 )
 
-@jwt_required
 @stats_blueprint.route('/buttonTest', methods=["GET"])
+@jwt_required
 def podajRankingButtonTestu():
     res = mongo.db.uzytkownicy.find_one({"_id": ObjectId('5abab2745b58012b784c8a31')})
     return response(res)

@@ -3,8 +3,9 @@ package com.uwm.wmii.student.michal.itmproj.singletons;
 import android.content.Context;
 
 import com.uwm.wmii.student.michal.itmproj.api.service.AuthRestService;
-import com.uwm.wmii.student.michal.itmproj.api.service.InterceptorJWT;
-import com.uwm.wmii.student.michal.itmproj.api.service.InterceptorRefreshTokenHeader;
+import com.uwm.wmii.student.michal.itmproj.api.interceptor.InterceptorJWT;
+import com.uwm.wmii.student.michal.itmproj.api.interceptor.InterceptorRefreshTokenHeader;
+import com.uwm.wmii.student.michal.itmproj.api.service.TestRestService;
 import com.uwm.wmii.student.michal.itmproj.api.service.UserRestService;
 
 import okhttp3.OkHttpClient;
@@ -41,6 +42,10 @@ public class AppRestManager {
         return retrofit.newBuilder().client(new OkHttpClient().newBuilder()
                 .addInterceptor(new InterceptorRefreshTokenHeader(applicationContext)).build())
                 .build().create(AuthRestService.class);
+    }
+
+    public TestRestService podajTestService() {
+        return retrofit.create(TestRestService.class);
     }
 
 }

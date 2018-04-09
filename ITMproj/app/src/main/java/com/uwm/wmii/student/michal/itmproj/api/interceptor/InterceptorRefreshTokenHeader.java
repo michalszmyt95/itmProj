@@ -1,4 +1,4 @@
-package com.uwm.wmii.student.michal.itmproj.api.service;
+package com.uwm.wmii.student.michal.itmproj.api.interceptor;
 
 import android.content.Context;
 

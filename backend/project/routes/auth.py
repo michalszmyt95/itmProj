@@ -26,6 +26,7 @@ def rejestrujLubZaloguj():
 
     if res is not None: #LOGOWANIE:
         id = str(res['_id'])
+        print('id użytkownika w naszej bazie: ' + str(id))
         access_token = str(create_access_token(identity=id))
         refresh_token = str(create_refresh_token(identity=id))
         return response(WynikRejestracji(access_token, refresh_token, False)) # zwracamy do klienta id istniejacego uzytkownika i false - bo uzytkownik juz istnieje w bazie
@@ -33,10 +34,17 @@ def rejestrujLubZaloguj():
     #REJESTRACJA:
     #jeśli uzytkownik pojawił się pierwszy raz, dodaj go do bazy:
     user['email'] = hashed_new_email
+    usunNiepotrzebneDaneUzytkownika(user)
     user_id = str(mongo.db.uzytkownicy.insert_one(user).inserted_id) # dodajemy nowy rekord do bazy oraz otrzymujemy spowrotem id nowego uzytkownika jako string
+    print('id nowego użytkownika w naszej bazie: ' + str(user_id))
     access_token = str(create_access_token(identity=user_id))
     refresh_token = str(create_refresh_token(identity=user_id))
     return response(WynikRejestracji(access_token, refresh_token, True))# zwracamy do klienta token nowego uzytkownika i true - bo uzytkownik zostal wlasnie dodany
+
+def usunNiepotrzebneDaneUzytkownika(user):
+    del user['socialId']
+    del user['metodaLogowania']
+    del user['socialAccessToken']
 
 def walidujZgodnoscTokenaOrazMailaZFacebookiemLubGoogle(user):
     # email, socialAccessToken (z serwisu społecznościowego), metoda logowania i socialId są wymagane:
@@ -64,10 +72,11 @@ def walidujZgodnoscTokenaOrazMailaZFacebookiemLubGoogle(user):
         if not emailZgodny:
             abort(401) # email nie byl zgodny po przeiterowaniu w petli - nie zautoryzowano uzytkownika wiec abort(401)
 
-@jwt_refresh_token_required
 @auth_blueprint.route('/odswiez-token')
+@jwt_refresh_token_required
 def odswiezToken():
     id_uzytkownika = get_jwt_identity() #funkcja podaje id uzytkownika z tokena.
+    print('otrzymane id uzytkownika z tokena: ' + str(id_uzytkownika))
     access_token = str(create_access_token(identity=id_uzytkownika))
     refresh_token = str(create_refresh_token(identity=id_uzytkownika))
     return response(WynikOdswiezeniaTokena(access_token, refresh_token, True))

@@ -1,22 +1,34 @@
 from flask import request, Blueprint
-from bson.objectid import ObjectId
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from project.db import mongo
-from flask_jwt_extended import jwt_required
-from project.utils import response
+from project.utils import response, podajUzytkownikaPoId
 
 tests_blueprint = Blueprint(
     'tests',
     __name__
 )
 
-@jwt_required
-@tests_blueprint.route('/buttonTest', methods=["POST"])
-def dodajWynikButtontestu():
-    res = request.json
-    return response(res)
 
+@tests_blueprint.route('/buttonTest', methods=["POST"])
 @jwt_required
-@tests_blueprint.route('/ranking/buttonTest', methods=["GET"])
-def podajRankingButtonTestu():
-    res = mongo.db.uzytkownicy.find_one({"_id": ObjectId()})
-    return response(res)
+def dodajWynikButtontestu():
+    wynikTestu = request.json
+    print('headers: ' + str(request.headers))
+    print('REQUEST ' + str(wynikTestu))
+
+    wynikTestu['test'] = 'buttonTest'
+
+    user_id = get_jwt_identity()
+    user = podajUzytkownikaPoId(user_id)
+
+    wynikTestu['user_id'] = user_id
+
+    print('Dane uzytkownika pobranego z bazy przy pomocy jwt tokena: ' + str(user))
+
+    wynikTestu['waga'] = user['waga']
+    wynikTestu['wiek'] = user['wiek']
+    wynikTestu['wzrost'] = user['wzrost']
+
+    mongo.db.buttonTest.insert_one(wynikTestu)
+
+    return response('OK')

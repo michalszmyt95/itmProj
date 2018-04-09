@@ -1,21 +1,27 @@
-from flask import Blueprint
-from bson.objectid import ObjectId
+from flask import request, Blueprint
+from flask_pymongo import ObjectId
 from project.db import mongo
-from flask_jwt_extended import jwt_required
-from project.utils import response
+from project.models.dto import WynikOperacji
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from project.utils import response, now
 
 users_blueprint = Blueprint(
     'users',
     __name__
 )
 
-@jwt_required
-@users_blueprint.route('/<string:user_id>', methods=["GET"])
-def podajUzytkownika(user_id):
-    user = mongo.db.uzytkownicy.find_one({"_id": ObjectId(user_id)})
-    return response(user)
 
+@users_blueprint.route('/profil', methods=["POST"])
 @jwt_required
-@users_blueprint.route('/<string:user_id>', methods=["PUT"])
-def edytujUzytkownika(user_id):
-    return 'test'
+def aktualizujProfil():
+    daneProfilu = request.json #dane typu waga, wzrost itp
+
+    print('dane profilu' + str(daneProfilu))
+
+    daneProfilu['data_aktualizacji'] = now()
+
+    print('dane profilu' + str(daneProfilu))
+
+    res = mongo.db.uzytkownicy.update_one({'_id': ObjectId(get_jwt_identity())}, {'$set': daneProfilu})
+    print('wynik update: ' + str(res))
+    return response(WynikOperacji("ustawProfil", True))

@@ -17,8 +17,18 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.uwm.wmii.student.michal.itmproj.api.dto.WynikTestuDTO;
+import com.uwm.wmii.student.michal.itmproj.api.service.TestRestService;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppRestManager;
+import com.uwm.wmii.student.michal.itmproj.utils.FunkcjePomocnicze;
+
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ButtonGameActivity extends AppCompatActivity {
 
@@ -31,14 +41,25 @@ public class ButtonGameActivity extends AppCompatActivity {
     TextView ileKlikniec;
     TextView czas;
     TextView odliczanie;
-    int iloscSekund = 30;
+    TextView wynikText;
+    Integer iloscSekund = 30;
+    Double okres = 0.81; // wzgledem sekund
+    Integer maksIloscKlikniec;
+
+    AppRestManager appRestManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_button_game);
+        appRestManager = AppRestManager.getInstance(getApplicationContext());
+        ustawZmienne();
         ustawDaneEkranu();
         ustawPrzyciski();
+    }
+
+    private void ustawZmienne() {
+        maksIloscKlikniec = ((Double)(iloscSekund / okres)).intValue();
     }
 
     private void ustawDaneEkranu() {
@@ -47,6 +68,9 @@ public class ButtonGameActivity extends AppCompatActivity {
         czas = findViewById(R.id.czas);
         odliczanie = findViewById(R.id.odliczanie_do_startu);
         odliczanie.setVisibility(View.GONE);
+
+        wynikText = findViewById(R.id.wynik_text);
+        wynikText.setVisibility(View.GONE);
 
         tlo = findViewById(R.id.tlo);
         tlo.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -66,9 +90,10 @@ public class ButtonGameActivity extends AppCompatActivity {
         testStartBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                wynikText.setVisibility(View.GONE);
                 iloscKlikniec = 0;
-                String iloscKliniec =  getApplicationContext().getString(R.string.trafienia) + " " + iloscKlikniec;
-                ileKlikniec.setText(iloscKliniec);
+                String kliknieciaString =  getApplicationContext().getString(R.string.trafienia) + " " + iloscKlikniec;
+                ileKlikniec.setText(kliknieciaString);
                 String czasText = getApplicationContext().getString(R.string.pozostalo_sekund) + " " + iloscSekund;
                 czas.setText(czasText);
                 testStartBtn.setVisibility(View.GONE);
@@ -93,15 +118,19 @@ public class ButtonGameActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                view.setEnabled(false);
-                iloscKlikniec++;
-                String iloscKliniec = getApplicationContext().getString(R.string.trafienia) + " " + iloscKlikniec;
-                ileKlikniec.setText(iloscKliniec);
+                if (view.isEnabled()) {
+                    view.setEnabled(false);
+                    doliczKlikniecie();
+                }
             }
         });
     }
 
     private void wykonajGre() {
+        //Wstępne ustawienie położenia przycisku:
+        btn.setY((float) (Math.random() * (wysokoscEkranu - btn.getHeight())));
+        btn.setX((float) (Math.random() * (szerokoscEkranu - btn.getWidth())));
+
         new CountDownTimer(iloscSekund * 1000, 1000) { // Odliczanie czasu:
             public void onTick(long millisUntilFinished) {
                 String czasText = getApplicationContext().getString(R.string.pozostalo_sekund) + " " + millisUntilFinished / 1000;
@@ -112,8 +141,7 @@ public class ButtonGameActivity extends AppCompatActivity {
                 wywolajWynik();
             }
         }.start();
-
-        new CountDownTimer(iloscSekund * 1000, 750) { // Timer przycisku. Max - 40 razy
+        new CountDownTimer(iloscSekund * 1000, ((Double)(1000 * okres)).intValue()) { // Timer przycisku.
             public void onTick(long millisUntilFinished) {
                 btn.setY((float) (Math.random() * (wysokoscEkranu - btn.getHeight())));
                 btn.setX((float) (Math.random() * (szerokoscEkranu - btn.getWidth())));
@@ -122,13 +150,40 @@ public class ButtonGameActivity extends AppCompatActivity {
             }
             public void onFinish() {
                 btn.setVisibility(View.GONE);
-                testStartBtn.setVisibility(View.VISIBLE);
             }
         }.start();
     }
 
-    private void wywolajWynik() {
+    private void doliczKlikniecie() {
+        iloscKlikniec++;
+        String iloscKliniec = getApplicationContext()
+                .getString(R.string.trafienia) + " " + iloscKlikniec + "/" + maksIloscKlikniec;
+        ileKlikniec.setText(iloscKliniec);
+    }
 
+    private void wywolajWynik() {
+        // zapis danych do bazy:
+        TestRestService testService = appRestManager.podajTestService();
+        double wynikWProcentach = (iloscKlikniec * 100) / maksIloscKlikniec;
+
+
+
+        WynikTestuDTO wynikTestu = new WynikTestuDTO(wynikWProcentach, new Date(), true);
+        testService.dodajWynikButtonTestu(wynikTestu).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d("RES:", response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+
+        testStartBtn.setVisibility(View.VISIBLE);
+        wynikText.setText(FunkcjePomocnicze.truncateDecimal(wynikWProcentach, 0).toString() + "% trafień!");
+        wynikText.setVisibility(View.VISIBLE);
     }
 
 }
