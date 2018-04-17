@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
     tools:context="com.uwm.wmii.student.michal.itmproj.AlkoPickerActivity">
+
+
 
     <TextView
         android:id="@+id/textView5"
@@ -26,50 +27,22 @@
         android:layout_marginTop="28dp"
         android:background="@null"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/beercounter"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:srcCompat="@drawable/beer" />
-
-
-    <TextView
-        android:id="@+id/beercounter"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="28dp"
-        android:text="0"
-        android:textSize="30sp"
-        app:layout_constraintHorizontal_bias="0.467"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
     <ImageButton
         android:id="@+id/winebutton"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginEnd="60dp"
         android:layout_marginTop="28dp"
         android:background="@null"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/winecounter"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:srcCompat="@drawable/wine" />
-
-
-    <TextView
-        android:id="@+id/winecounter"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="104dp"
-        android:text="0"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
     <ImageButton
@@ -86,49 +59,24 @@
         android:layout_marginLeft="50dp" />
 
 
-    <TextView
-        android:id="@+id/vodkacounter"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="256dp"
-        android:text="0"
-        android:textSize="30sp"
-        app:layout_constraintHorizontal_bias="0.449"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
     <ImageButton
         android:id="@+id/cocktailbutton"
         android:layout_width="100dp"
         android:layout_height="100dp"
+        android:layout_marginEnd="60dp"
         android:layout_marginTop="184dp"
         android:background="@null"
         android:scaleType="fitCenter"
-        app:layout_constraintEnd_toStartOf="@+id/cocktailcounter"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5"
         app:srcCompat="@drawable/cocktail" />
 
 
     <TextView
-        android:id="@+id/cocktailcounter"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="260dp"
-        android:text="0"
-        android:textSize="30sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="304dp"
+        android:layout_marginTop="320dp"
         android:text="@string/kiedy_wypiles"
         android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -136,47 +84,79 @@
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
-    <EditText
-        android:id="@+id/currentTime"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="84dp"
-        android:layout_marginLeft="204dp"
-        android:ems="10"
-        android:inputType="time"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+    <TextView
+        android:id="@+id/beercounter"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:text="0"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/beerbutton"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/winecounter"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:text="0"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/winebutton"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/vodkacounter"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="184dp"
+        android:text="0"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/vodkabutton"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <TextView
+        android:id="@+id/cocktailcounter"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="184dp"
+        android:text="0"
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/cocktailbutton"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
 
     <EditText
-        android:id="@+id/currentDate"
-        android:layout_width="125dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="84dp"
-        android:layout_marginLeft="40dp"
-        android:clickable="true"
+        android:id="@+id/date"
+        android:layout_width="133dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="120dp"
+        android:layout_marginStart="28dp"
         android:ems="10"
+        android:gravity="center"
         android:inputType="date"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/okbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="108dp"
-        android:text="OK"
+    <EditText
+        android:id="@+id/time"
+        android:layout_width="147dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="120dp"
+        android:layout_marginEnd="28dp"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="time"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/abulujbutton"
+        android:id="@+id/zatwierdzalko"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="72dp"
-        android:text="ANULUJ"
+        android:layout_marginBottom="33dp"
+        android:text="OK"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

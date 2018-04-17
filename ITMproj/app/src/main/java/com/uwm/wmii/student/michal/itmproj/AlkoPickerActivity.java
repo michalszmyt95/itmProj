@@ -4,6 +4,8 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,9 +24,14 @@ import com.uwm.wmii.student.michal.itmproj.api.dto.AlkoholeDTO;
 
 import java.sql.Time;
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class AlkoPickerActivity extends AppCompatActivity  implements NumberPicker.OnValueChangeListener {
 
@@ -39,65 +46,60 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
     private int mMonth;
     private int mDay;
     private int mYear;
-    private TextView currentDate;
-    private TextView currentTime;
-
+    private ImageButton beerButton;
+    private ImageButton wineButton;
+    private ImageButton vodkaButton;
+    private ImageButton cocktailButton;
+    private TextView time;
+    private TextView date;
+    private SimpleDateFormat dateFormatter;
+    private Date today;
+    private SimpleDateFormat timeFormatter;
+    private Locale current;
+    private SimpleDateFormat dateAndTimeFormatter;
+    private Button zatwierdzAlko;
+    private Date chosenDate;
+    private Date chosenTime;
+    private Date dataICzasWypicia;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alko_picker);
-        final Calendar c = Calendar.getInstance();
-        mYear = c.get(Calendar.YEAR);
-        mMonth = c.get(Calendar.MONTH);
-        mDay = c.get(Calendar.DAY_OF_MONTH);
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
 
+        current = getResources().getConfiguration().locale;
+        dateFormatter = new SimpleDateFormat("dd.MM.yyyy", current);
+        timeFormatter = new SimpleDateFormat("HH:mm", current);
+        dateAndTimeFormatter = new SimpleDateFormat("dd.MM.yyyy HH:mm", current);
+        today = new Date();
+        time = (TextView) findViewById(R.id.time);
+        date = (TextView) findViewById(R.id.date);
+        time.setText(timeFormatter.format(today));
+        date.setText(dateFormatter.format(today));
 
-        currentTime = (TextView) findViewById(R.id.currentTime);
-        currentDate = (TextView) findViewById(R.id.currentDate);
-
-        currentDate.setText(String.valueOf(mDay) + "." + String.valueOf(mMonth+1) + "." + String.valueOf(mYear));
-
-        if(mMinute < 10) {
-            currentTime.setText(String.valueOf(mHour) + ":0" + String.valueOf(mMinute));
-        }
-        else {
-            currentTime.setText(String.valueOf(mHour) + ":" + String.valueOf(mMinute));
-        }
-
-        beerCounter = (TextView) findViewById(R.id.beercounter);
-        ImageButton beerButton = (ImageButton) findViewById(R.id.beerbutton);
-
-        wineCounter = (TextView) findViewById(R.id.winecounter);
-        ImageButton wineButton = (ImageButton) findViewById(R.id.winebutton);
-
-        vodkaCounter = (TextView) findViewById(R.id.vodkacounter);
-        ImageButton vodkaButton = (ImageButton) findViewById(R.id.vodkabutton);
-
-        cocktailCounter = (TextView) findViewById(R.id.cocktailcounter);
-        ImageButton cocktailButton = (ImageButton) findViewById(R.id.cocktailbutton);
-
-        Button okButton = (Button) findViewById(R.id.okbutton);
-        Button anulujButton = (Button) findViewById(R.id.abulujbutton);
-
-        currentDate.setOnClickListener(new View.OnClickListener() {
+        date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePicker();
             }
         });
 
-
-        currentTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimePicker();
-
-            }
+        time.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 showTimePicker();
+             }
         });
+
+        beerCounter = (TextView) findViewById(R.id.beercounter);
+        beerButton = (ImageButton) findViewById(R.id.beerbutton);
+        wineCounter = (TextView) findViewById(R.id.winecounter);
+        wineButton = (ImageButton) findViewById(R.id.winebutton);
+        vodkaCounter = (TextView) findViewById(R.id.vodkacounter);
+        vodkaButton = (ImageButton) findViewById(R.id.vodkabutton);
+        cocktailCounter = (TextView) findViewById(R.id.cocktailcounter);
+        cocktailButton = (ImageButton) findViewById(R.id.cocktailbutton);
         beerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -126,9 +128,9 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
             }
         });
 
+        zatwierdzAlko = (Button) findViewById(R.id.zatwierdzalko);
 
-
-        okButton.setOnClickListener(new View.OnClickListener() {
+        zatwierdzAlko.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlkoholeDTO alkoholeDTO = new AlkoholeDTO();
@@ -136,64 +138,96 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
                 alkoholeDTO.setIloscWodka(Integer.parseInt(vodkaCounter.getText().toString()));
                 alkoholeDTO.setIloscWino(Integer.parseInt(wineCounter.getText().toString()));
                 alkoholeDTO.setIloscCocktail(Integer.parseInt(cocktailCounter.getText().toString()));
-                //TODO implement DateTime Parsing
+                try {
+                    dataICzasWypicia =
+                            dateAndTimeFormatter.parse(dateAndTimeFormatter.format(String.valueOf(date.getText()) + String.valueOf(time.getText())));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                alkoholeDTO.setDataCzasWypicia(dataICzasWypicia);
                 startActivity(new Intent(AlkoPickerActivity.this, ButtonGameActivity.class));
-
-            }
-        });
-
-        anulujButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(AlkoPickerActivity.this, AlkoNinjaLauncher.class));
-
             }
         });
 
     }
+
+
 
     public void showDatePicker(){
+        final Dialog dateDialog = new Dialog(AlkoPickerActivity.this);
+        dateDialog.setTitle("DatePicker");
+        dateDialog.setContentView(R.layout.date_picker);
+        ImageButton okdp = (ImageButton) dateDialog.findViewById(R.id.okdp);
+        ImageButton anulujdp = (ImageButton) dateDialog.findViewById(R.id.anulujdp);
+        final DatePicker dp = (DatePicker) dateDialog.findViewById(R.id.datePicker);
+        dp.setMaxDate(new Date().getTime());
+
+        okdp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                   chosenDate = dateFormatter.parse(String.valueOf(dp.getDayOfMonth()) + "." + String.valueOf(dp.getMonth() + 1) + "." + String.valueOf(dp.getYear()));
+                   date.setText(dateFormatter.format(chosenDate));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                dateDialog.dismiss();
+            }
+
+        });
+
+        anulujdp.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                dateDialog.dismiss(); // dismiss the dialog
+            }
+        });
+        dateDialog.show();
 
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
-                new DatePickerDialog.OnDateSetListener() {
 
 
-                    @Override
-                    public void onDateSet(DatePicker view, int year,
-                                          int monthOfYear, int dayOfMonth) {
-
-                        currentDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year);
-
-                    }
-                }, mYear, mMonth, mDay);
-        datePickerDialog.show();
     }
 
-    public void showTimePicker(){
-        final Calendar c = Calendar.getInstance();
-        mHour = c.get(Calendar.HOUR_OF_DAY);
-        mMinute = c.get(Calendar.MINUTE);
+  public void showTimePicker(){
+      final Dialog timeDialog = new Dialog(AlkoPickerActivity.this);
+      timeDialog.setTitle("TimePicker");
+      timeDialog.setContentView(R.layout.time_picker);
+      ImageButton oktp = (ImageButton) timeDialog.findViewById(R.id.oktp);
+      ImageButton anulujtp = (ImageButton) timeDialog.findViewById(R.id.anulujtp);
+      final TimePicker tp = (TimePicker) timeDialog.findViewById(R.id.timePicker);
+      tp.setIs24HourView(true);
 
-        // Launch Time Picker Dialog
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
 
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
 
-                        if(minute < 10) {
-                            currentTime.setText(hourOfDay + ":0" + minute);
-                        }
-                        else {
-                            currentTime.setText(hourOfDay + ":" + minute);
-                        }
+      oktp.setOnClickListener(new View.OnClickListener() {
 
-                    }
-                }, mHour, mMinute, true);
-        timePickerDialog.show();
-    }
+          @RequiresApi(api = Build.VERSION_CODES.M)
+          @Override
+          public void onClick(View v) {
+              try {
+                  chosenTime = timeFormatter.parse(String.valueOf(tp.getHour()) + ":"+ String.valueOf(tp.getMinute()));
+                  time.setText(timeFormatter.format(chosenTime));
+              } catch (ParseException e) {
+                  e.printStackTrace();
+              }
+              timeDialog.dismiss();
+          }
+
+      });
+
+      anulujtp.setOnClickListener(new View.OnClickListener()
+      {
+          @Override
+          public void onClick(View v) {
+              timeDialog.dismiss();
+          }
+      });
+      timeDialog.show();
+
+
+  }
 
 
 
@@ -202,45 +236,63 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
         final Dialog numberDialog = new Dialog(AlkoPickerActivity.this);
         numberDialog.setTitle("NumberPicker");
         numberDialog.setContentView(R.layout.number_dialog);
-        Button ok = (Button)numberDialog.findViewById(R.id.ok);
-        Button anuluj = (Button) numberDialog.findViewById(R.id.anuluj);
-        final NumberPicker np = (NumberPicker) numberDialog.findViewById(R.id.alkoPicker);
+
+        ImageButton oknp = numberDialog.findViewById(R.id.oknp);
+        ImageButton anulujnp = numberDialog.findViewById(R.id.anulujnp);
+        TextView title = numberDialog.findViewById(R.id.title);
+
+        switch (buttonName) {
+
+            case "beer" : title.setText("Browarki" );
+                break;
+            case "vodka" : title.setText("Wódeczki" );
+                break;
+            case "wine" : title.setText("Winka" );
+                break;
+            case "cocktail" : title.setText("Drineczki" );
+                break;
+        }
+
+
+        final NumberPicker np = numberDialog.findViewById(R.id.alkoPicker);
         np.setMaxValue(20); // max value 100
         np.setMinValue(0);   // min value 0
+        np.setValue(Integer.parseInt(vodkaCounter.getText().toString()));
         np.setWrapSelectorWheel(false);
-        np.setOnValueChangedListener((NumberPicker.OnValueChangeListener) this);
-        ok.setOnClickListener(new View.OnClickListener()
+
+        oknp.setOnClickListener(new View.OnClickListener()
         {
-            @Override
-            public void onClick(View v) {
-            if(buttonName == "beer") {
-                beerCounter.setText(String.valueOf(np.getValue())); //set the value to textview
+             @Override
+             public void onClick(View v) {
+             if(buttonName == "beer") {
+                 beerCounter.setText(String.valueOf(np.getValue())); //set the value to textview
 
-            }
-            if(buttonName == "wine") {
-                wineCounter.setText(String.valueOf(np.getValue())); //set the value to textview
+             }
+             if(buttonName == "wine") {
+                 wineCounter.setText(String.valueOf(np.getValue())); //set the value to textview
 
-            }
-            if(buttonName == "vodka") {
-                vodkaCounter.setText(String.valueOf(np.getValue())); //set the value to textview
+             }
+             if(buttonName == "vodka") {
+                 vodkaCounter.setText(String.valueOf(np.getValue())); //set the value to textview
 
-            }
-            if(buttonName == "cocktail") {
-                cocktailCounter.setText(String.valueOf(np.getValue())); //set the value to textview
+             }
+             if(buttonName == "cocktail") {
+                 cocktailCounter.setText(String.valueOf(np.getValue())); //set the value to textview
 
-            }
-                    numberDialog.dismiss();
+             }
+                     numberDialog.dismiss();
 
 
-            }
-        });
-        anuluj.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                numberDialog.dismiss(); // dismiss the dialog
-            }
-        });
+             }
+         });
+
+         anulujnp.setOnClickListener(new View.OnClickListener()
+         {
+             @Override
+             public void onClick(View v) {
+                 numberDialog.dismiss(); // dismiss the dialog
+             }
+         });
         numberDialog.show();
 
     }
