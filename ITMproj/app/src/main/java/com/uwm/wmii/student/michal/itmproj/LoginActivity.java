@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -57,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     private AppRestManager appRestManager;
     private AuthRestService authRestService;
     private AppStatusManager appStatusManager;
+    private Button noLoginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,7 @@ public class LoginActivity extends AppCompatActivity {
 
         ustawLogowanieGoogle();
         ustawLogowaniePrzezFacebooka();
+        ustawWejscieBezLogowania();
 
         //Jeśli użytkownik ma połączenie z internetem:
         if (appStatusManager.isOnline()) {
@@ -101,7 +104,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-   //     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        //     GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
     }
 
     private void zalogujLubZarejestrujSieDoSerwera() {
@@ -126,6 +129,18 @@ public class LoginActivity extends AppCompatActivity {
 
     private void przejdzDoMainActivity() {
         startActivity(new Intent(LoginActivity.this, NavigationDrawer.class));
+    }
+
+    private void ustawWejscieBezLogowania() {
+        noLoginButton = findViewById(R.id.no_login_button);
+        noLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                appLoginManager.wyloguj();
+                appLoginManager.wylogujSocial();
+                przejdzDoMainActivity();
+            }
+        });
     }
 
     private void ustawLogowanieGoogle() {

@@ -2,6 +2,7 @@ package com.uwm.wmii.student.michal.itmproj.singletons;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.StrictMode;
 import android.util.Log;
@@ -50,6 +51,14 @@ public class AppLoginManager {
 
     public void setGoogleSignInClient(GoogleSignInClient mGoogleSignInClient) {
         this.mGoogleSignInClient = mGoogleSignInClient;
+    }
+
+    /**
+     * Funkcja pokazująca komunikat o potrzebie zalogowania się.
+     */
+    public void przejdzDoEkranuLogowaniaZKomunikatem() {
+        context.startActivity(new Intent(context, LoginActivity.class));
+        Toast.makeText(context, "Funkcja wymaga zalogowania się", Toast.LENGTH_LONG).show();
     }
 
     public GoogleSignInClient getGoogleSignInClient() {

@@ -93,17 +93,29 @@ public class NavigationDrawer extends AppCompatActivity
             ft.replace(R.id.flMain,new HomeFragment());
             ft.commit();
         } else if (id == R.id.nav_profile) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flMain, new ProfileFragment());
-            ft.commit();
+            if (appLoginManager.czyUzytkownikZalogowany()) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.flMain, new ProfileFragment());
+                ft.commit();
+            } else {
+                appLoginManager.przejdzDoEkranuLogowaniaZKomunikatem();
+            }
         } else if (id == R.id.nav_party) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flMain,new PartyFragment());
-            ft.commit();
+            if (appLoginManager.czyUzytkownikZalogowany()) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.flMain, new PartyFragment());
+                ft.commit();
+            } else {
+                appLoginManager.przejdzDoEkranuLogowaniaZKomunikatem();
+            }
         } else if (id == R.id.nav_statistics) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.flMain, new StatisticsFragment());
-            ft.commit();
+            if (appLoginManager.czyUzytkownikZalogowany()) {
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.flMain, new StatisticsFragment());
+                ft.commit();
+            } else {
+                appLoginManager.przejdzDoEkranuLogowaniaZKomunikatem();
+            }
         } else if (id == R.id.nav_settings) {
             Intent i = new Intent(NavigationDrawer.this, SettingsActivity.class);
             startActivity(i);

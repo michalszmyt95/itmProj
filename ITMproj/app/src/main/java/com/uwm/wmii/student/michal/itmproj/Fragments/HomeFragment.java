@@ -14,11 +14,16 @@ import com.uwm.wmii.student.michal.itmproj.ButtonGameActivity;
 import com.uwm.wmii.student.michal.itmproj.GamesActivity;
 import com.uwm.wmii.student.michal.itmproj.R;
 import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
+
+    private int iloscGier = 2;
+
+    private AppLoginManager appLoginManager;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -27,6 +32,9 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        appLoginManager = AppLoginManager.getInstance(getContext());
+
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Button homeButtonTest = (Button) view.findViewById(R.id.homeButton1);
         Button homeButtonAl = (Button) view.findViewById(R.id.homeButton2);
@@ -35,15 +43,28 @@ public class HomeFragment extends Fragment {
         homeButtonTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Todo: sprawdzac stan uzytkownika (czy zalogowany)
-                startActivity(new Intent(getActivity(), GamesActivity.class));
+            if (appLoginManager.czyUzytkownikZalogowany()) {
+                switch(wylosujNumerGry()) {
+                    case 0:
+                        startActivity(new Intent(getActivity(), ButtonGameActivity.class));
+                        break;
+                    case 1:
+                        startActivity(new Intent(getActivity(), AlkoNinjaLauncher.class));
+                        break;
+                }
+            } else {
+                appLoginManager.przejdzDoEkranuLogowaniaZKomunikatem();
+            }
             }
         });
         homeButtonAl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            if (appLoginManager.czyUzytkownikZalogowany()) {
                 startActivity(new Intent(getActivity(), AlkoPickerActivity.class));
-                //Todo: zrobic ten widok i przypisac click , sprawdzic stan uzytkownika
+            } else {
+                appLoginManager.przejdzDoEkranuLogowaniaZKomunikatem();
+            }
             }
         });
         homeButtonGames.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +74,10 @@ public class HomeFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private int wylosujNumerGry() {
+        return Double.valueOf(Math.random() * iloscGier).intValue();
     }
 
 }
