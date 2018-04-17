@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         //Jeśli użytkownik ma połączenie z internetem:
         if (appStatusManager.isOnline()) {
             //Jeśli użytkownik już zalogowany:
-            if(appLoginManager.czyUzytkownikZalogowany()) {
+            if(appLoginManager.czyTokenJestAktualny()) {
                 // Po prostu przechodzimy do ekranu głównego, bo użytkownik jest zalogowany - posiada aktualny accessToken.
                 przejdzDoMainActivity();
                 return;

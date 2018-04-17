@@ -216,6 +216,11 @@ public class AppLoginManager {
 
     public boolean czyUzytkownikZalogowany() {
         String tokenString = pobierzAccessTokenSerwera();
+        return tokenString != null;
+    }
+
+    public boolean czyTokenJestAktualny() {
+        String tokenString = pobierzAccessTokenSerwera();
         if (tokenString == null) {
             return false;
         }
