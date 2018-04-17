@@ -169,6 +169,7 @@ public class ButtonGameActivity extends AppCompatActivity {
 
 
         WynikTestuDTO wynikTestu = new WynikTestuDTO(wynikWProcentach, new Date(), true);
+
         testService.dodajWynikButtonTestu(wynikTestu).enqueue(new Callback<String>() {
             @Override
             public void onResponse(Call<String> call, Response<String> response) {

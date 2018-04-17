@@ -85,8 +85,13 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 appLoginManager.odswiezTokenAsynchronicznie(new CallbackWynikInterface() {
                     @Override
-                    public void execute() {
+                    public void gdySukces() {
                         przejdzDoMainActivity();
+                    }
+
+                    @Override
+                    public void gdyBlad() {
+
                     }
                 });
             }

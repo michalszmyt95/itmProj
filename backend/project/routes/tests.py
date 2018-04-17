@@ -31,4 +31,8 @@ def dodajWynikButtontestu():
 
     mongo.db.buttonTest.insert_one(wynikTestu)
 
+    wynikTestu['jakasWartosc'] = 5
+
+    mongo.db.testowaTabela.insert_one(wynikTestu)
+
     return response('OK')

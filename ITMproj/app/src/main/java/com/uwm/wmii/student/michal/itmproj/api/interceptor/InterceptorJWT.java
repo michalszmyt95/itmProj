@@ -25,6 +25,7 @@ public class InterceptorJWT implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request newRequest  = chain.request().newBuilder()
+           //     .addHeader("Authorization", "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1MjM5MTE2NzgsIm5iZiI6MTUyMzkxMTY3OCwianRpIjoiOTMyM2FiOGUtMmNjZi00NjE2LTk4M2YtYzFjMGYxMTJmZWY1IiwiZXhwIjoxNTIzOTEyNTc4LCJpZGVudGl0eSI6IjVhY2JlYWRhY2M2MTdhMjc0MDUxNGNmMyIsImZyZXNoIjpmYWxzZSwidHlwZSI6ImFjY2VzcyJ9.ymtHyH0ibm9k3dvxfW263nBNWHQd99I5FwRc7GtaU_s")
                 .addHeader("Authorization", "Bearer " + appLoginManager.pobierzAccessTokenSerwera())
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Accept", "application/json")

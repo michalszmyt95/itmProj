@@ -129,12 +129,14 @@ public class AppLoginManager {
                 if (wynik != null && wynik.getOdswiezonoPoprawnie() != null && wynik.getOdswiezonoPoprawnie()) {
                     zapiszAccessTokenDoSharedPreferences(wynik.getAccessToken());
                     zapiszRefreshTokenDoSharedPreferences(wynik.getRefreshToken());
-                    onWynik.execute();
+                    onWynik.gdySukces();
+
                 }
             }
 
             @Override
             public void onFailure(Call<WynikOdswiezeniaTokenaDTO> call, Throwable t) {
+                onWynik.gdyBlad();
                 Log.d(TAG, "Błąd serwera");
                 Toast.makeText(context, "Serwer nie odpowiada.", Toast.LENGTH_LONG).show();
                 //TODO: Obsłużyć błąd serwera.

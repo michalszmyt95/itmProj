@@ -2,6 +2,7 @@ package com.uwm.wmii.student.michal.itmproj.singletons;
 
 import android.content.Context;
 
+import com.uwm.wmii.student.michal.itmproj.api.interceptor.InterceptorTryRefreshJWT;
 import com.uwm.wmii.student.michal.itmproj.api.service.AuthRestService;
 import com.uwm.wmii.student.michal.itmproj.api.interceptor.InterceptorJWT;
 import com.uwm.wmii.student.michal.itmproj.api.interceptor.InterceptorRefreshTokenHeader;
@@ -29,7 +30,10 @@ public class AppRestManager {
     private AppRestManager() {
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://10.0.2.2:5000/") // Nadany InterceptorJWT sprawia ze zawsze wysylamy token jwt do serwera oraz oczekujemy jsona i wysylamy jsona.
-                .client(new OkHttpClient().newBuilder().addInterceptor(new InterceptorJWT(applicationContext)).build())
+                .client(new OkHttpClient().newBuilder()
+                        .addInterceptor(new InterceptorJWT(applicationContext))
+                        .addInterceptor(new InterceptorTryRefreshJWT(applicationContext))
+                        .build())
                 .addConverterFactory(GsonConverterFactory.create());
         retrofit = builder.build();
     }
@@ -47,5 +51,4 @@ public class AppRestManager {
     public TestRestService podajTestService() {
         return retrofit.create(TestRestService.class);
     }
-
 }
