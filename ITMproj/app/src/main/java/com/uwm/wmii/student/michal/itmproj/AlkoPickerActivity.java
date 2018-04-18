@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
 import android.widget.TextSwitcher;
@@ -21,6 +23,9 @@ import android.widget.TimePicker;
 
 import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
 import com.uwm.wmii.student.michal.itmproj.api.dto.AlkoholeDTO;
+import com.uwm.wmii.student.michal.itmproj.api.service.AlkoRestService;
+import com.uwm.wmii.student.michal.itmproj.api.service.TestRestService;
+import com.uwm.wmii.student.michal.itmproj.singletons.AppRestManager;
 
 import java.sql.Time;
 import java.text.DateFormat;
@@ -33,7 +38,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class AlkoPickerActivity extends AppCompatActivity  implements NumberPicker.OnValueChangeListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager.appRestManager;
+
+public class AlkoPickerActivity extends AppCompatActivity   {
 
 
     static Dialog numberDialog;
@@ -61,12 +72,15 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
     private Date chosenDate;
     private Date chosenTime;
     private Date dataICzasWypicia;
+    AppRestManager appRestManager;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alko_picker);
+        appRestManager = AppRestManager.getInstance(getApplicationContext());
 
         current = getResources().getConfiguration().locale;
         dateFormatter = new SimpleDateFormat("dd.MM.yyyy", current);
@@ -77,6 +91,9 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
         date = (TextView) findViewById(R.id.date);
         time.setText(timeFormatter.format(today));
         date.setText(dateFormatter.format(today));
+        disableEditText((EditText) time);
+        disableEditText((EditText) date);
+
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -139,18 +156,45 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
                 alkoholeDTO.setIloscWino(Integer.parseInt(wineCounter.getText().toString()));
                 alkoholeDTO.setIloscCocktail(Integer.parseInt(cocktailCounter.getText().toString()));
                 try {
-                    dataICzasWypicia =
-                            dateAndTimeFormatter.parse(dateAndTimeFormatter.format(String.valueOf(date.getText()) + String.valueOf(time.getText())));
+
+                    String  wybranaData = String.valueOf(date.getText()) + " " + String.valueOf(time.getText());
+                    dataICzasWypicia =  dateAndTimeFormatter.parse(wybranaData);
+                    alkoholeDTO.setDataCzasWypicia(dataICzasWypicia);
+
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                alkoholeDTO.setDataCzasWypicia(dataICzasWypicia);
+
+
+                zapiszAlkohole(alkoholeDTO);
+
                 startActivity(new Intent(AlkoPickerActivity.this, ButtonGameActivity.class));
             }
         });
 
     }
 
+    private void zapiszAlkohole(AlkoholeDTO alkohole) {
+        AlkoRestService alkoService = appRestManager.dodajAlkohole();
+
+        alkoService.dodajAlkohole(alkohole).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                Log.d("RES:", response.toString());
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+    private void disableEditText(EditText editText) {
+        editText.setFocusable(false);
+        editText.setCursorVisible(false);
+    }
 
 
     public void showDatePicker(){
@@ -230,7 +274,6 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
   }
 
 
-
     public void showNumberPicker(final String buttonName)
     {
         final Dialog numberDialog = new Dialog(AlkoPickerActivity.this);
@@ -255,8 +298,8 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
 
 
         final NumberPicker np = numberDialog.findViewById(R.id.alkoPicker);
-        np.setMaxValue(20); // max value 100
-        np.setMinValue(0);   // min value 0
+        np.setMaxValue(20);
+        np.setMinValue(0);
         np.setValue(Integer.parseInt(vodkaCounter.getText().toString()));
         np.setWrapSelectorWheel(false);
 
@@ -298,10 +341,4 @@ public class AlkoPickerActivity extends AppCompatActivity  implements NumberPick
     }
 
 
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-
-        Log.i("value is",""+newVal);
-
-    }
 }

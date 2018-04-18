@@ -13,18 +13,18 @@ tests_blueprint = Blueprint(
 @tests_blueprint.route('/buttonTest', methods=["POST"])
 @jwt_required
 def dodajWynikButtontestu():
-    wynikTestu = request.json #pobranie danych Å¼Ä…dania od androida - pobrane dane majÄ… strukturÄ™ sÅ‚ownikowÄ… (mapa)
-    print('headers: ' + str(request.headers)) #wyÅ›wietlenie w konsoli danych wejÅ›ciowych z Å¼adania
-    print('REQUEST ' + str(wynikTestu)) #wyÅ›wietlenie w konsoli danych wejÅ›ciowych z Å¼adania
+    wynikTestu = request.json #pobranie danych ¿¹dania od androida - pobrane dane maj¹ strukturê s³ownikow¹ (mapa)
+    print('headers: ' + str(request.headers)) #wyœwietlenie w konsoli danych wejœciowych z ¿adania
+    print('REQUEST ' + str(wynikTestu)) #wyœwietlenie w konsoli danych wejœciowych z ¿adania
 
-    # skoro jest to sÅ‚ownik, moÅ¼emy odwoÅ‚aÄ‡ siÄ™ do wartoÅ›ci poprzez mechanizm slownik['klucz'] -> wartoÅ›Ä‡.
-    # w tym przypadku przypisujemy do klucza 'test' wartoÅ›Ä‡ 'buttonTest', by w bazie danych byÅ‚o wiadomo ktÃ³ry to byÅ‚ test.
+    # skoro jest to s³ownik, mo¿emy odwo³aæ siê do wartoœci poprzez mechanizm slownik['klucz'] -> wartoœæ.
+    # w tym przypadku przypisujemy do klucza 'test' wartoœæ 'buttonTest', by w bazie danych by³o wiadomo który to by³ test.
     wynikTestu['test'] = 'buttonTest'
 
-    user_id = get_jwt_identity() #dziÄ™ki uÅ¼yciu maÅ‚pki @jwt_required moÅ¼emy uÅ¼yÄ‡ tej metody by wyÅ‚uskaÄ‡ id uÅ¼ytkownika ktÃ³ry wysÅ‚aÅ‚ Å¼Ä…danie.
-    user = podajUzytkownikaPoId(user_id) #metoda w project/utils zwracajÄ…ca obiekt uÅ¼ytkownika po jego id.
+    user_id = get_jwt_identity() #dziêki u¿yciu ma³pki @jwt_required mo¿emy u¿yæ tej metody by wy³uskaæ id u¿ytkownika który wys³a³ ¿¹danie.
+    user = podajUzytkownikaPoId(user_id) #metoda w project/utils zwracaj¹ca obiekt u¿ytkownika po jego id.
 
-    wynikTestu['user_id'] = user_id # przypisanie do wyniku testu id uÅ¼ytkownika
+    wynikTestu['user_id'] = user_id # przypisanie do wyniku testu id u¿ytkownika
 
     print('Dane uzytkownika pobranego z bazy przy pomocy jwt tokena: ' + str(user)) #wyswietlenie kontrolne danych w konsoli
 
@@ -35,8 +35,37 @@ def dodajWynikButtontestu():
 
     mongo.db.buttonTest.insert_one(wynikTestu) #wykonanie insertu do bazy danych
 
-    # zwracamy dane uzywajac metody response() z project/utils. Metoda ta zamienia kaÅ¼dy obiekt z pythona na JSON.
-    # jest to potrzebne, by android mÃ³gÅ‚ w poprawny sposÃ³b otrzymaÄ‡ dane.
-    # obiekt ktÃ³ry zwracamy, to WynikOperacji z project/models/dto.py ktÃ³ry pozwala na zdefiniowanie identyfikatora oraz informacji boolowskiej.
-    # po stronie androida musi byÄ‡ utworzona klasa implementujÄ…ca w analogiczny sposÃ³b obiekt jak ten po stronie pythona.
+    # zwracamy dane uzywajac metody response() z project/utils. Metoda ta zamienia ka¿dy obiekt z pythona na JSON.
+    # jest to potrzebne, by android móg³ w poprawny sposób otrzymaæ dane.
+    # obiekt który zwracamy, to WynikOperacji z project/models/dto.py który pozwala na zdefiniowanie identyfikatora oraz informacji boolowskiej.
+    # po stronie androida musi byæ utworzona klasa implementuj¹ca w analogiczny sposób obiekt jak ten po stronie pythona.
     return response(WynikOperacji("buttonTestWynik", True))
+
+
+@tests_blueprint.route('/ninjaTest', methods=["POST"])
+@jwt_required
+def dodajWynikNinjatestu():
+    wynikTestu = request.json
+    print('headers: ' + str(request.headers))
+    print('REQUEST ' + str(wynikTestu))
+
+    wynikTestu['test'] = 'ninjaTest'
+
+    user_id = get_jwt_identity()
+    user = podajUzytkownikaPoId(user_id)
+
+    wynikTestu['user_id'] = user_id
+
+    print('Dane uzytkownika pobranego z bazy przy pomocy jwt tokena: ' + str(user))
+
+    wynikTestu['waga'] = user['waga']
+    wynikTestu['wiek'] = user['wiek']
+    wynikTestu['wzrost'] = user['wzrost']
+
+    mongo.db.buttonTest.insert_one(wynikTestu)
+
+    wynikTestu['jakasWartosc'] = 5
+
+    mongo.db.testowaTabela.insert_one(wynikTestu)
+
+    return response('OK')

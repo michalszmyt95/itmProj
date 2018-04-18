@@ -55,9 +55,9 @@ project(":app") {
     configurations { natives }
 
     dependencies {
-        compile project(":core")
         implementation 'com.android.support:appcompat-v7:27.1.0'
         implementation 'com.android.support:design:27.1.0'
+
         implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
@@ -82,16 +82,3 @@ project(":app") {
     }
 }
 
-project(":core") {
-    apply plugin: "java"
-
-
-    dependencies {
-        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-
-    }
-
-}

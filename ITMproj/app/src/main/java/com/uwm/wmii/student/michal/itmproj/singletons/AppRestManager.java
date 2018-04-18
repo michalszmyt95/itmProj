@@ -2,6 +2,7 @@ package com.uwm.wmii.student.michal.itmproj.singletons;
 
 import android.content.Context;
 
+import com.uwm.wmii.student.michal.itmproj.api.service.AlkoRestService;
 import com.uwm.wmii.student.michal.itmproj.api.interceptor.InterceptorTryRefreshJWT;
 import com.uwm.wmii.student.michal.itmproj.api.service.AuthRestService;
 import com.uwm.wmii.student.michal.itmproj.api.interceptor.InterceptorJWT;
@@ -51,4 +52,6 @@ public class AppRestManager {
     public TestRestService podajTestService() {
         return retrofit.create(TestRestService.class);
     }
+
+    public AlkoRestService dodajAlkohole() { return retrofit.create(AlkoRestService.class);}
 }
