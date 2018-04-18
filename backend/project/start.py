@@ -4,6 +4,7 @@ from project.routes.auth import auth_blueprint
 from project.routes.stats import stats_blueprint
 from project.routes.users import users_blueprint
 from project.routes.tests import tests_blueprint
+from project.routes.alkohole import alkohole_blueprint
 
 
 def create_app():
@@ -24,6 +25,8 @@ def rejestruj_blueprinty(app):
     app.register_blueprint(stats_blueprint, url_prefix='/stats')
     app.register_blueprint(users_blueprint, url_prefix='/users')
     app.register_blueprint(tests_blueprint, url_prefix='/tests')
+    app.register_blueprint(alkohole_blueprint, url_prefix='/alkohole')
+
 
 def rejestruj_index(app):
     @app.route('/', methods=["GET"])

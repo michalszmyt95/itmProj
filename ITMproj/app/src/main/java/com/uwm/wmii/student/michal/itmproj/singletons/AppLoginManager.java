@@ -30,7 +30,7 @@ import retrofit2.Response;
 
 public class AppLoginManager {
     private static final AppLoginManager ourInstance = new AppLoginManager();
-    private static AppRestManager appRestManager;
+    public static AppRestManager appRestManager;
     private static Context context;
     private static SharedPreferences sharedPreferences;
     private String TAG = "AppLoginManager";
