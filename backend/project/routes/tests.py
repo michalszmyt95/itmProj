@@ -13,18 +13,18 @@ tests_blueprint = Blueprint(
 @tests_blueprint.route('/buttonTest', methods=["POST"])
 @jwt_required
 def dodajWynikButtontestu():
-    wynikTestu = request.json #pobranie danych ¿¹dania od androida - pobrane dane maj¹ strukturê s³ownikow¹ (mapa)
-    print('headers: ' + str(request.headers)) #wyœwietlenie w konsoli danych wejœciowych z ¿adania
-    print('REQUEST ' + str(wynikTestu)) #wyœwietlenie w konsoli danych wejœciowych z ¿adania
+    wynikTestu = request.json #pobranie danych zadania od androida - pobrane dane maja strukture slownikowa (mapa)
+    print('headers: ' + str(request.headers)) #wyswietlenie w konsoli danych wejeciowych z zadania
+    print('REQUEST ' + str(wynikTestu)) #wyswietlenie w konsoli danych wejsciowych z zadania
 
-    # skoro jest to s³ownik, mo¿emy odwo³aæ siê do wartoœci poprzez mechanizm slownik['klucz'] -> wartoœæ.
-    # w tym przypadku przypisujemy do klucza 'test' wartoœæ 'buttonTest', by w bazie danych by³o wiadomo który to by³ test.
+    # skoro jest to slownik, mozemy odwolac sie do wartosci poprzez mechanizm slownik['klucz'] -> wartosc.
+    # w tym przypadku przypisujemy do klucza 'test' wartosc 'buttonTest', by w bazie danych bylo wiadomo ktory to byl test.
     wynikTestu['test'] = 'buttonTest'
 
-    user_id = get_jwt_identity() #dziêki u¿yciu ma³pki @jwt_required mo¿emy u¿yæ tej metody by wy³uskaæ id u¿ytkownika który wys³a³ ¿¹danie.
-    user = podajUzytkownikaPoId(user_id) #metoda w project/utils zwracaj¹ca obiekt u¿ytkownika po jego id.
+    user_id = get_jwt_identity() #dzieki uzyciu malpki @jwt_required mozemy uzyc tej metody by wyluskac id uzytkownika ktory wyslal zadanie.
+    user = podajUzytkownikaPoId(user_id) #metoda w project/utils zwracajaca obiekt uzytkownika po jego id.
 
-    wynikTestu['user_id'] = user_id # przypisanie do wyniku testu id u¿ytkownika
+    wynikTestu['user_id'] = user_id # przypisanie do wyniku testu id uzytkownika
 
     print('Dane uzytkownika pobranego z bazy przy pomocy jwt tokena: ' + str(user)) #wyswietlenie kontrolne danych w konsoli
 
@@ -35,12 +35,11 @@ def dodajWynikButtontestu():
 
     mongo.db.buttonTest.insert_one(wynikTestu) #wykonanie insertu do bazy danych
 
-    # zwracamy dane uzywajac metody response() z project/utils. Metoda ta zamienia ka¿dy obiekt z pythona na JSON.
-    # jest to potrzebne, by android móg³ w poprawny sposób otrzymaæ dane.
-    # obiekt który zwracamy, to WynikOperacji z project/models/dto.py który pozwala na zdefiniowanie identyfikatora oraz informacji boolowskiej.
-    # po stronie androida musi byæ utworzona klasa implementuj¹ca w analogiczny sposób obiekt jak ten po stronie pythona.
+    # zwracamy dane uzywajac metody response() z project/utils. Metoda ta zamienia kazdy obiekt z pythona na JSON.
+    # jest to potrzebne, by android mogl w poprawny sposob otrzymac dane.
+    # obiekt ktory zwracamy, to WynikOperacji z project/models/dto.py ktory pozwala na zdefiniowanie identyfikatora oraz informacji boolowskiej.
+    # po stronie androida musi byc utworzona klasa implementujaca w analogiczny sposob obiekt jak ten po stronie pythona.
     return response(WynikOperacji("buttonTestWynik", True))
-
 
 @tests_blueprint.route('/ninjaTest', methods=["POST"])
 @jwt_required
