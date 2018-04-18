@@ -27,14 +27,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".ButtonGameActivity" />
-        <activity android:name=".MainActivity" />
-		<activity android:name=".AlkoPickerActivity"    
+        <activity android:name=".AlkoPickerActivity"
 				  android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".alkoninja.AlkoNinjaLauncher"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".NavigationDrawer"
+            android:name=".MainActivity"
             android:configChanges="orientation"
             android:label="@string/title_activity_navigation_drawer"
             android:screenOrientation="portrait"
@@ -43,7 +42,7 @@
         <activity android:name=".SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NavigationDrawer" />
+                android:value=".MainActivity" />
         </activity>
         <activity
             android:name=".GamesActivity"

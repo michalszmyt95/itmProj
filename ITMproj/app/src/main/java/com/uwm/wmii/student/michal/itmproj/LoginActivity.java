@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void przejdzDoMainActivity() {
-        startActivity(new Intent(LoginActivity.this, NavigationDrawer.class));
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 
     private void ustawWejscieBezLogowania() {

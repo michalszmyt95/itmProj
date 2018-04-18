@@ -1,48 +1,33 @@
 package com.uwm.wmii.student.michal.itmproj;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.NumberPicker;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
 import com.uwm.wmii.student.michal.itmproj.api.dto.AlkoholeDTO;
 import com.uwm.wmii.student.michal.itmproj.api.service.AlkoRestService;
-import com.uwm.wmii.student.michal.itmproj.api.service.TestRestService;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppRestManager;
 
-import java.sql.Time;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager.appRestManager;
 
 public class AlkoPickerActivity extends AppCompatActivity   {
 
@@ -168,7 +153,7 @@ public class AlkoPickerActivity extends AppCompatActivity   {
 
                 zapiszAlkohole(alkoholeDTO);
 
-                startActivity(new Intent(AlkoPickerActivity.this, ButtonGameActivity.class));
+                startActivity(new Intent(AlkoPickerActivity.this, MainActivity.class));
             }
         });
 
