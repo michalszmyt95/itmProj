@@ -5,6 +5,7 @@ from project.routes.stats import stats_blueprint
 from project.routes.users import users_blueprint
 from project.routes.tests import tests_blueprint
 from project.routes.alkohole import alkohole_blueprint
+import datetime
 
 
 def create_app():
@@ -12,6 +13,7 @@ def create_app():
     app.config['MONGO_DBNAME'] = 'itmProj'
     app.config['MONGO_URI'] = 'mongodb+srv://itmProj:denaturat100%@itmproj-fddwr.mongodb.net/itmProj'
     app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
+    app.config['JWT_ACCESS_TOKEN_EXPIRES'] = datetime.timedelta(minutes=10)
     mongo.init_app(app)
     hashing.init_app(app)
     jwt.init_app(app)

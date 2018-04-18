@@ -80,3 +80,9 @@ def odswiezToken():
     access_token = str(create_access_token(identity=id_uzytkownika))
     refresh_token = str(create_refresh_token(identity=id_uzytkownika))
     return response(WynikOdswiezeniaTokena(access_token, refresh_token, True))
+
+@auth_blueprint.route('/hello', methods=["POST"])
+def hello():
+    daneWejsciowe = request.json # imię
+    print(daneWejsciowe)
+    return response("hello " + daneWejsciowe)

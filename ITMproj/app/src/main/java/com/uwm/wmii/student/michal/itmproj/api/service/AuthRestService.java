@@ -21,4 +21,7 @@ public interface AuthRestService {
     @GET("/auth/odswiez-token")
     Call<WynikOdswiezeniaTokenaDTO> odswiezToken();
 
+    @POST("/auth/hello")
+    Call<String> helloWorld(@Body String imie);
+
 }

@@ -26,7 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserDataActivity" />
         <activity android:name=".ButtonGameActivity" />
         <activity android:name=".MainActivity" />
 		<activity android:name=".AlkoPickerActivity"    
