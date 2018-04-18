@@ -17,6 +17,7 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.uwm.wmii.student.michal.itmproj.api.dto.WynikOperacjiDTO;
 import com.uwm.wmii.student.michal.itmproj.api.dto.WynikTestuDTO;
 import com.uwm.wmii.student.michal.itmproj.api.service.TestRestService;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppRestManager;
@@ -166,18 +167,16 @@ public class ButtonGameActivity extends AppCompatActivity {
         TestRestService testService = appRestManager.podajTestService();
         double wynikWProcentach = (iloscKlikniec * 100) / maksIloscKlikniec;
 
-
-
         WynikTestuDTO wynikTestu = new WynikTestuDTO(wynikWProcentach, new Date(), true);
 
-        testService.dodajWynikButtonTestu(wynikTestu).enqueue(new Callback<String>() {
+        testService.dodajWynikButtonTestu(wynikTestu).enqueue(new Callback<WynikOperacjiDTO>() {
             @Override
-            public void onResponse(Call<String> call, Response<String> response) {
+            public void onResponse(Call<WynikOperacjiDTO> call, Response<WynikOperacjiDTO> response) {
                 Log.d("RES:", response.toString());
             }
 
             @Override
-            public void onFailure(Call<String> call, Throwable t) {
+            public void onFailure(Call<WynikOperacjiDTO> call, Throwable t) {
 
             }
         });

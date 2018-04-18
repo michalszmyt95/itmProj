@@ -17,6 +17,6 @@ import retrofit2.http.Path;
 public interface TestRestService {
 
     @POST("/tests/buttonTest")
-    Call<String> dodajWynikButtonTestu(@Body WynikTestuDTO wynikTestu);
+    Call<WynikOperacjiDTO> dodajWynikButtonTestu(@Body WynikTestuDTO wynikTestu);
 
 }
