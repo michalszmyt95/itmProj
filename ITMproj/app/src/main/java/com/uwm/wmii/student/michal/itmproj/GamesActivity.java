@@ -1,10 +1,13 @@
 package com.uwm.wmii.student.michal.itmproj;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import com.uwm.wmii.student.michal.itmproj.AlkoPickerActivity;
+
 
 import com.uwm.wmii.student.michal.itmproj.ButtonGameActivity;
 import com.uwm.wmii.student.michal.itmproj.R;
@@ -21,6 +24,7 @@ public class GamesActivity extends AppCompatActivity {
         Button testyBtn = (Button) findViewById(R.id.games_button_test);
         Button testyBtn2 = (Button) findViewById(R.id.games_button_ninja);
 
+
         testyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -34,4 +38,5 @@ public class GamesActivity extends AppCompatActivity {
             }
         });
     }
+
 }

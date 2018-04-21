@@ -1,5 +1,6 @@
 package com.uwm.wmii.student.michal.itmproj;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -11,17 +12,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.uwm.wmii.student.michal.itmproj.Fragments.ProfileFragment;
 import com.uwm.wmii.student.michal.itmproj.Fragments.StatisticsFragment;
 import com.uwm.wmii.student.michal.itmproj.Fragments.HomeFragment;
 import com.uwm.wmii.student.michal.itmproj.Fragments.PartyFragment;
+import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppLoginManager;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppLoginManager appLoginManager;
+    private Dialog addAlkoholDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +49,7 @@ public class MainActivity extends AppCompatActivity
         ft.replace(R.id.flMain,new HomeFragment());
         ft.commit();
         navigationView.setCheckedItem(R.id.nav_home);
+        addAlkoholDialog = new Dialog(MainActivity.this);
 
     }
 
@@ -125,4 +132,53 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    public void showAddAlkoholDialog() {
+
+        addAlkoholDialog.setTitle("AddAlkohol");
+        addAlkoholDialog.setContentView(R.layout.add_alkohol_dialog);
+        Button ok = (Button) addAlkoholDialog.findViewById(R.id.ok);
+        Button anuluj = (Button) addAlkoholDialog.findViewById(R.id.anuluj);
+
+      ok.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              Intent i = new Intent(MainActivity.this, AlkoPickerActivity.class);
+              i.putExtra("fromTest", true);
+
+              startActivity(i);
+
+              addAlkoholDialog.dismiss();
+          }
+      });
+
+      anuluj.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+              addAlkoholDialog.dismiss();
+              rozpocznijTest();
+          }
+      });
+      addAlkoholDialog.show();
+
+    }
+
+
+    private int iloscGier = 2;
+    public int wylosujNumerGry() {
+        return Double.valueOf(Math.random() * iloscGier).intValue();
+    }
+    public void rozpocznijTest() {
+        switch(wylosujNumerGry()) {
+            case 0:
+                startActivity(new Intent(MainActivity.this, ButtonGameActivity.class));
+                break;
+            case 1:
+                startActivity(new Intent(MainActivity.this,  AlkoNinjaLauncher.class));
+                break;
+        }
+    }
+
+
 }

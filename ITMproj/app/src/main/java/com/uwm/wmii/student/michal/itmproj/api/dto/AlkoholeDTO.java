@@ -57,7 +57,7 @@ public class AlkoholeDTO {
     }
 
     public void setIloscCocktail(int iloscCocktail) {
-        this.iloscPiwo = iloscCocktail;
+        this.iloscCocktail = iloscCocktail;
     }
 
     public Date getDataCzasWypicia() {

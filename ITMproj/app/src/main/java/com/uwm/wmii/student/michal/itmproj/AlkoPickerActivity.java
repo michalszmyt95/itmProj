@@ -1,6 +1,7 @@
 package com.uwm.wmii.student.michal.itmproj;
 
 import android.app.Dialog;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -16,6 +17,8 @@ import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.uwm.wmii.student.michal.itmproj.Fragments.HomeFragment;
+import com.uwm.wmii.student.michal.itmproj.alkoninja.AlkoNinjaLauncher;
 import com.uwm.wmii.student.michal.itmproj.api.dto.AlkoholeDTO;
 import com.uwm.wmii.student.michal.itmproj.api.service.AlkoRestService;
 import com.uwm.wmii.student.michal.itmproj.singletons.AppRestManager;
@@ -31,8 +34,6 @@ import retrofit2.Response;
 
 public class AlkoPickerActivity extends AppCompatActivity   {
 
-
-    static Dialog numberDialog;
     private TextView beerCounter;
     private TextView wineCounter;
     private TextView vodkaCounter;
@@ -63,6 +64,9 @@ public class AlkoPickerActivity extends AppCompatActivity   {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Bundle b = getIntent().getExtras();
+        final boolean fromTest = b.getBoolean("fromTest");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alko_picker);
         appRestManager = AppRestManager.getInstance(getApplicationContext());
@@ -78,7 +82,6 @@ public class AlkoPickerActivity extends AppCompatActivity   {
         date.setText(dateFormatter.format(today));
         disableEditText((EditText) time);
         disableEditText((EditText) date);
-
 
         date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,12 +99,6 @@ public class AlkoPickerActivity extends AppCompatActivity   {
 
         beerCounter = (TextView) findViewById(R.id.beercounter);
         beerButton = (ImageButton) findViewById(R.id.beerbutton);
-        wineCounter = (TextView) findViewById(R.id.winecounter);
-        wineButton = (ImageButton) findViewById(R.id.winebutton);
-        vodkaCounter = (TextView) findViewById(R.id.vodkacounter);
-        vodkaButton = (ImageButton) findViewById(R.id.vodkabutton);
-        cocktailCounter = (TextView) findViewById(R.id.cocktailcounter);
-        cocktailButton = (ImageButton) findViewById(R.id.cocktailbutton);
         beerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,6 +106,8 @@ public class AlkoPickerActivity extends AppCompatActivity   {
             }
         });
 
+        wineCounter = (TextView) findViewById(R.id.winecounter);
+        wineButton = (ImageButton) findViewById(R.id.winebutton);
         wineButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +115,8 @@ public class AlkoPickerActivity extends AppCompatActivity   {
             }
         });
 
+        vodkaCounter = (TextView) findViewById(R.id.vodkacounter);
+        vodkaButton = (ImageButton) findViewById(R.id.vodkabutton);
         vodkaButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -123,6 +124,8 @@ public class AlkoPickerActivity extends AppCompatActivity   {
             }
         });
 
+        cocktailCounter = (TextView) findViewById(R.id.cocktailcounter);
+        cocktailButton = (ImageButton) findViewById(R.id.cocktailbutton);
         cocktailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,6 +138,12 @@ public class AlkoPickerActivity extends AppCompatActivity   {
         zatwierdzAlko.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Integer iloscPiwa = Integer.parseInt(beerCounter.getText().toString());
+                Integer iloscWodki = Integer.parseInt(vodkaCounter.getText().toString());
+                Integer iloscWina = Integer.parseInt(wineCounter.getText().toString());
+                Integer iloscDrinki = Integer.parseInt(cocktailCounter.getText().toString());
+
                 AlkoholeDTO alkoholeDTO = new AlkoholeDTO();
                 alkoholeDTO.setIloscPiwo(Integer.parseInt(beerCounter.getText().toString()));
                 alkoholeDTO.setIloscWodka(Integer.parseInt(vodkaCounter.getText().toString()));
@@ -149,14 +158,32 @@ public class AlkoPickerActivity extends AppCompatActivity   {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-
                 zapiszAlkohole(alkoholeDTO);
 
-                startActivity(new Intent(AlkoPickerActivity.this, MainActivity.class));
+                if(fromTest == true) {
+                    rozpocznijTest();
+                }
+                else {
+                    startActivity(new Intent(AlkoPickerActivity.this, MainActivity.class));
+                }
             }
         });
 
+    }
+
+    private int iloscGier = 2;
+    public int wylosujNumerGry() {
+        return Double.valueOf(Math.random() * iloscGier).intValue();
+    }
+    public void rozpocznijTest() {
+        switch(wylosujNumerGry()) {
+            case 0:
+                startActivity(new Intent(AlkoPickerActivity.this, ButtonGameActivity.class));
+                break;
+            case 1:
+                startActivity(new Intent(AlkoPickerActivity.this,  AlkoNinjaLauncher.class));
+                break;
+        }
     }
 
     private void zapiszAlkohole(AlkoholeDTO alkohole) {
