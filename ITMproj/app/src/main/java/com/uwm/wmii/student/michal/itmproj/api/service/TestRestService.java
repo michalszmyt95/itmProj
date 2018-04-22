@@ -19,4 +19,7 @@ public interface TestRestService {
     @POST("/tests/buttonTest")
     Call<String> dodajWynikButtonTestu(@Body WynikTestuDTO wynikTestu);
 
+    @POST("/tests/ninjaTest")
+    Call<String> dodajWynikNinjaTestu(@Body WynikTestuDTO wynikTestu);
+
 }
