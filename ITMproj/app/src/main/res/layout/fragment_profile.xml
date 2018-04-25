@@ -10,56 +10,89 @@
     android:layout_height="wrap_content">
 
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp">
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/wiek_input"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/wiek_label"
-            android:inputType="number" />
+            android:padding="12dp">
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/wiek_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/wiek_label"
+                android:inputType="number" />
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp">
+        </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/wzrost_input"
-            android:inputType="number"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/wzrost_label"/>
+            android:padding="12dp">
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/wzrost_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/wzrost_label"
+                android:inputType="number" />
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="12dp">
+        </android.support.design.widget.TextInputLayout>
 
-
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/waga_input"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/waga_label"
-            android:inputType="number" />
-
-    </android.support.design.widget.TextInputLayout>
+            android:padding="12dp">
 
 
-</LinearLayout>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/waga_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/waga_label"
+                android:inputType="number" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <RadioGroup
+            android:id="@+id/plec_radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            android:paddingLeft="17dp"
+            android:paddingRight="17dp"
+            android:paddingTop="12dp">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/plec"
+                android:textSize="18sp" />
+
+            <RadioButton
+                android:id="@+id/man_radio"
+                android:layout_width="49dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/mezczyzna" />
+
+            <RadioButton
+                android:id="@+id/woman_radio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/kobieta" />
+        </RadioGroup>
+
+
+    </LinearLayout>
 
     <RelativeLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/akceptuj_dane_btn"
@@ -67,6 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:text="@string/przycisk_akceptuj_dane" />
+
     </RelativeLayout>
 
 </FrameLayout>
