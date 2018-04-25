@@ -15,13 +15,17 @@ users_blueprint = Blueprint(
 @jwt_required
 def aktualizujProfil():
     daneProfilu = request.json #dane typu waga, wzrost itp
-
     print('dane profilu' + str(daneProfilu))
-
     daneProfilu['data_aktualizacji'] = now()
-
     print('dane profilu' + str(daneProfilu))
-
     res = mongo.db.uzytkownicy.update_one({'_id': ObjectId(get_jwt_identity())}, {'$set': daneProfilu})
     print('wynik update: ' + str(res))
     return response(WynikOperacji("ustawProfil", True))
+
+
+@users_blueprint.route('/profil', methods=["GET"])
+@jwt_required
+def podajDaneProfilu():
+    user_id = ObjectId(get_jwt_identity())
+    dane_z_bazy = mongo.db.uzytkownicy.find_one({'_id': user_id})
+    return response(dane_z_bazy)

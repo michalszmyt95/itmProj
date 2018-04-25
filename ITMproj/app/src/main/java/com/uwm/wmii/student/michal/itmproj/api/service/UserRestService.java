@@ -20,4 +20,7 @@ public interface UserRestService {
 
     @POST("/users/profil")
     Call<WynikOperacjiDTO> aktualizujProfil(@Body ProfilDTO user);
+
+    @GET("/users/profil")
+    Call<ProfilDTO> podajProfil();
 }

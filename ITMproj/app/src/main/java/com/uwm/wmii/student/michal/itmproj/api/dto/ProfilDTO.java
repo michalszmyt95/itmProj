@@ -50,4 +50,14 @@ public class ProfilDTO {
     public void setPlec(String plec) {
         this.plec = plec;
     }
+
+    @Override
+    public String toString() {
+        return "ProfilDTO{" +
+                "wiek=" + wiek +
+                ", wzrost=" + wzrost +
+                ", waga=" + waga +
+                ", plec='" + plec + '\'' +
+                '}';
+    }
 }

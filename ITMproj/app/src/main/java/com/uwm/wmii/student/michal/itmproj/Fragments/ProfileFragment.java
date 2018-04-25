@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.uwm.wmii.student.michal.itmproj.R;
@@ -28,34 +29,85 @@ import retrofit2.Response;
  */
 public class ProfileFragment extends Fragment {
 
-
     private TextInputEditText wiekInput;
     private TextInputEditText wzrostInput;
     private TextInputEditText wagaInput;
     private Button przyciskAkceptacji;
     private AppLoginManager appLoginManager;
     private AppRestManager appRestManager;
+    private RadioGroup plecRadioGroup;
+    private View view;
+    private String wybranaPlec;
 
     public ProfileFragment() { } // Potrzebny pusty publiczny konstruktor.
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        ustawInputy(view);
         ustawPrzyciskAkceptacji(view);
 
         this.appRestManager = AppRestManager.getInstance(getContext());
         this.appLoginManager = AppLoginManager.getInstance(getContext());
 
+        UserRestService userService = appRestManager.podajUserService();
+        userService.podajProfil().enqueue(new Callback<ProfilDTO>() {
+            @Override
+            public void onResponse(Call<ProfilDTO> call, Response<ProfilDTO> response) {
+                ustawInputy(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ProfilDTO> call, Throwable t) {
+                ustawInputy(null);
+            }
+        });
+
         return view;
     }
 
-    private void ustawInputy(View view) {
+    private void ustawInputy(ProfilDTO daneProfilu) {
         wiekInput = view.findViewById(R.id.wiek_input);
         wzrostInput = view.findViewById(R.id.wzrost_input);
         wagaInput = view.findViewById(R.id.waga_input);
+        plecRadioGroup = view.findViewById(R.id.plec_radio_group);
+
+        plecRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.man_radio:
+                        wybranaPlec = "M";
+                        break;
+                    case R.id.woman_radio:
+                        wybranaPlec = "K";
+                        break;
+                }
+            }
+        });
+
+        if (daneProfilu != null) {
+            if (daneProfilu.getWiek() != null) {
+                wiekInput.setText(String.valueOf(daneProfilu.getWiek()));
+            }
+            if (daneProfilu.getWzrost() != null) {
+                wzrostInput.setText(String.valueOf(daneProfilu.getWzrost()));
+            }
+            if (daneProfilu.getWaga() != null) {
+                wagaInput.setText(String.valueOf(daneProfilu.getWaga()));
+            }
+            if (daneProfilu.getPlec() != null) {
+                switch (daneProfilu.getPlec()) {
+                    case "M":
+                        plecRadioGroup.check(R.id.man_radio);
+                        break;
+                    case "K":
+                        plecRadioGroup.check(R.id.woman_radio);
+                        break;
+                }
+            }
+        }
     }
 
     private void ustawPrzyciskAkceptacji(View view) {
@@ -68,6 +120,7 @@ public class ProfileFragment extends Fragment {
                     profilDTO.setWiek(Integer.parseInt(wiekInput.getText().toString()));
                     profilDTO.setWzrost(Float.parseFloat(wzrostInput.getText().toString()));
                     profilDTO.setWaga(Float.parseFloat(wagaInput.getText().toString()));
+                    profilDTO.setPlec(wybranaPlec);
                     aktualizujProfilWBazieDanych(profilDTO);
                 }
             }
@@ -93,6 +146,11 @@ public class ProfileFragment extends Fragment {
             komunikat.setGravity(Gravity.TOP, 0, 230);
             komunikat.show();
             return false;
+        } else if (wybranaPlec == null) {
+            komunikat = Toast.makeText(getContext(), "Należy określić płeć", Toast.LENGTH_LONG);
+            komunikat.setGravity(Gravity.TOP, 0, 230);
+            komunikat.show();
+            return false;
         }
         return true;
     }
@@ -106,7 +164,6 @@ public class ProfileFragment extends Fragment {
             // Akcje które dzieją się przy  wartości z serwera:
             @Override
             public void onResponse(Call<WynikOperacjiDTO> call, Response<WynikOperacjiDTO> response) {
-                Toast.makeText(getContext(), "UDALO SIE!", Toast.LENGTH_LONG).show();
                 if (response.isSuccessful()) {
                     try {
                         Log.d("ID OPERACJI: ", response.body().getId());
@@ -119,7 +176,7 @@ public class ProfileFragment extends Fragment {
             }
             @Override
             public void onFailure(Call<WynikOperacjiDTO> call, Throwable t) {
-                Toast.makeText(getContext(), "NIE UDALO SIE :(", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Błąd serwera", Toast.LENGTH_LONG).show();
                 Log.d("BLAD RESTA: ", t.toString());
             }
         });
