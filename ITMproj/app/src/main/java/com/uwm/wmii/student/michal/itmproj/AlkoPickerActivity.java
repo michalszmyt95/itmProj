@@ -158,7 +158,10 @@ public class AlkoPickerActivity extends AppCompatActivity   {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                zapiszAlkohole(alkoholeDTO);
+
+                if(iloscPiwa != 0 || iloscWodki != 0  || iloscWina != 0 || iloscDrinki != 0) {
+                    zapiszAlkohole(alkoholeDTO);
+                }
 
                 if(fromTest == true) {
                     rozpocznijTest();
