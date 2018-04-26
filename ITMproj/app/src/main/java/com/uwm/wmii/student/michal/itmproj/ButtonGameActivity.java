@@ -1,6 +1,7 @@
 package com.uwm.wmii.student.michal.itmproj;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.design.widget.FloatingActionButton;
@@ -184,6 +185,11 @@ public class ButtonGameActivity extends AppCompatActivity {
         testStartBtn.setVisibility(View.VISIBLE);
         wynikText.setText(FunkcjePomocnicze.truncateDecimal(wynikWProcentach, 0).toString() + "% trafień!");
         wynikText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ButtonGameActivity.this, MainActivity.class));
     }
 
 }

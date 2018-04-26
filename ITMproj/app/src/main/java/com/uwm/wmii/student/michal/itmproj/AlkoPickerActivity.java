@@ -335,8 +335,7 @@ public class AlkoPickerActivity extends AppCompatActivity   {
                  cocktailCounter.setText(String.valueOf(np.getValue())); //set the value to textview
 
              }
-                     numberDialog.dismiss();
-
+             numberDialog.dismiss();
 
              }
          });
@@ -350,6 +349,11 @@ public class AlkoPickerActivity extends AppCompatActivity   {
          });
         numberDialog.show();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AlkoPickerActivity.this, MainActivity.class));
     }
 
 
