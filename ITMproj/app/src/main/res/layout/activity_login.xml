@@ -1,48 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.uwm.wmii.student.michal.itmproj.LoginActivity">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_centerInParent="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linearLayout">
+        android:layout_height="wrap_content">
 
-        <Button
-            android:id="@+id/no_login_button"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="30dp"
-            android:text="Wejdź bez logowania"
-            >
-        </Button>
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_button"
-            android:layout_width="260dp"
-            android:layout_height="86dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="30dp" />
-
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="260dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="30dp"
-            android:layout_marginTop="30dp" />
-
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingBottom="24dp"
+            android:paddingTop="64dp"
+            android:text="Chuchnij"
+            android:textAlignment="center"
+            android:textSize="24pt"
+            android:textStyle="normal"
+            android:typeface="monospace"
+            android:background="?android:attr/colorActivatedHighlight" />
     </LinearLayout>
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="2691dp"
+        android:layout_height="105dp"
+        android:layout_gravity="center"
+        android:background="?android:attr/colorActivatedHighlight"
+        app:srcCompat="@drawable/alcohol_waves"
+        tools:ignore="VectorDrawableCompat" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff2d8">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="0dp"
+            android:background="@android:color/holo_orange_light"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_alignParentLeft="true">
+
+            <Button
+                android:id="@+id/no_login_button"
+                android:layout_width="260dp"
+                android:layout_height="28dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="18dp"
+                android:background="?android:attr/colorActivatedHighlight"
+                android:text="Wejdź bez logowania"
+                android:textAllCaps="false"
+                android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                android:textSize="14sp"></Button>
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_button"
+                android:layout_width="260dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="14dp"
+                android:layout_marginTop="0dp" />
+
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="268dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="0dp"
+                android:layout_marginTop="0dp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 
 
-</RelativeLayout>
+</LinearLayout>
