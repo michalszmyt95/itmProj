@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#afafaf</color>
+    <color name="kolor_belki">#21212d</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="greenLight">#FF037070</color>
+    <color name="Light">#454747</color>
+    <color name="darkBlue">#242632</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

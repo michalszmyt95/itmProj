@@ -28,15 +28,21 @@
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="CKButton" parent="android:style/Widget.Button">
+    <style name="AcceptButton" parent="android:style/Widget.Button">
         <item name="android:textSize">19sp</item>
-        <item name="android:layout_margin">0dip</item>
-        <item name="android:background">#ff0000</item>
+        <item name="android:background">@drawable/accept_button</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
-    <style name="MyTextViewStyle">
+    <style name="NormalButton" parent="android:style/Widget.Button">
+        <item name="android:textSize">19sp</item>
+        <item name="android:background">@drawable/normal_button</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
+    <style name="Header">
         <item name="android:textSize">40sp</item>
-        <item name="android:color">#fe12ef</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
 </resources>

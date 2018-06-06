@@ -86,21 +86,24 @@
                 android:text="@string/kobieta" />
         </RadioGroup>
 
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/akceptuj_dane_btn"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="@string/przycisk_akceptuj_dane" />
+            android:orientation="vertical"
+            android:padding="12dp">
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/akceptuj_dane_btn"
+                style="@style/AcceptButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:text="@string/przycisk_akceptuj_dane"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
 
 </FrameLayout>
