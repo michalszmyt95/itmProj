@@ -4,9 +4,9 @@
 
     <item
         android:id="@+id/logout"
-        android:icon="@drawable/ic_power_settings_new_black_24dp"
+        android:icon="@android:drawable/ic_lock_power_off"
+        android:orderInCategory="0"
         android:title="@string/tab_menu_wyloguj"
-        app:showAsAction="always"
-        android:orderInCategory="0"/>
+        app:showAsAction="always" />
 
 </menu>

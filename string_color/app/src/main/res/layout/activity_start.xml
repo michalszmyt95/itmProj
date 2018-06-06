@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/start"
+    tools:context=".startActivity">
+
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="79dp"
+        android:onClick="RunCounter"
+        android:text="rozpocznij grę"
+        tools:layout_editor_absoluteX="123dp"
+        tools:layout_editor_absoluteY="368dp" />
+
+    <TextView
+        android:id="@+id/licznik"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="193dp"
+        android:text="3"
+        android:textColor="#fafaf8"
+        android:textSize="60dp"
+        tools:layout_editor_absoluteX="88dp"
+        tools:layout_editor_absoluteY="168dp" />
+
+    <TextView
+        android:id="@+id/textView_opis"
+        android:layout_width="284dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="210dp"
+        android:text="Zaznacz nazwę koloru w którym wyświetlany jest napis"
+        android:textColor="#fafaf8"
+        android:gravity="center"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/textView_przyklad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/licznik"
+        android:layout_alignStart="@+id/textView_opis"
+        android:text="ŻÓŁTY"
+        android:textColor="#FF0000"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/textView_przyklad_odp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/licznik"
+        android:layout_alignEnd="@+id/textView_opis"
+        android:text="= CZERWONY"
+        android:textColor="#008000"
+        android:textSize="30sp" />
+</RelativeLayout>

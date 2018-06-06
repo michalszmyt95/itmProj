@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_wiki"
+        android:icon="@drawable/icon_menu"
+        android:orderInCategory="100"
+        android:title="Efekt Stroopa - wiki" />
+    <item
+        android:id="@+id/o_nas"
+        android:orderInCategory="100"
+        android:title="o nas" />
+
+
+</menu>
