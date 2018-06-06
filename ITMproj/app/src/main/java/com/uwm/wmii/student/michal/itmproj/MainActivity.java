@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.uwm.wmii.student.michal.itmproj.Fragments.ProfileFragment;
 import com.uwm.wmii.student.michal.itmproj.Fragments.StatisticsFragment;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity
 
     private AppLoginManager appLoginManager;
     private Dialog addAlkoholDialog;
+    private TextView username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

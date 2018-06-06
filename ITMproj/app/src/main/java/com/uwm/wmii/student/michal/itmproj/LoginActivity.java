@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -252,7 +253,6 @@ public class LoginActivity extends AppCompatActivity {
                 final DaneLogowania daneLogowania = new DaneLogowania();
                 daneLogowania.setSocialAccessToken(loginResult.getAccessToken().getToken());
                 daneLogowania.setMetodaLogowania(MetodaLogowania.Facebook);
-
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject facebookUserDTO, GraphResponse response) {
@@ -272,6 +272,8 @@ public class LoginActivity extends AppCompatActivity {
                         zalogujLubZarejestrujSieDoSerwera();
                     }
                 });
+
+
                 //Request Graph API
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,email,first_name,last_name");

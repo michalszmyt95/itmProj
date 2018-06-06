@@ -55,8 +55,8 @@ project(":app") {
     configurations { natives }
 
     dependencies {
-        implementation 'com.android.support:appcompat-v7:27.1.0'
-        implementation 'com.android.support:design:27.1.0'
+        implementation 'com.android.support:appcompat-v7:27.1.1'
+        implementation 'com.android.support:design:27.1.1'
 
         implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"

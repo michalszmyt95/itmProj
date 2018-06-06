@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
+    android:background="@drawable/tlo"
     android:layout_height="wrap_content">
 
     <TimePicker
@@ -29,7 +30,8 @@
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/timePicker"
-        app:srcCompat="@drawable/ok3" />
+        app:srcCompat="@drawable/ok3"
+        android:layout_marginRight="104dp" />
 
     <ImageButton
         android:id="@+id/anulujtp"
@@ -41,6 +43,7 @@
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/timePicker"
-        app:srcCompat="@drawable/cancel3" />
+        app:srcCompat="@drawable/cancel3"
+        android:layout_marginLeft="104dp" />
 
 </android.support.constraint.ConstraintLayout>
